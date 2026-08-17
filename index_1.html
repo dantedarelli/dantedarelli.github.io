@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dante Darelli — Advogado | Consultivo Empresarial</title>
+<meta name="description" content="Dante Darelli — advogado especialista em direito civil e empresarial. Consultivo empresarial, estruturação de novos negócios e contratos. Também atua como empresário de artistas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --violet:#7C3AED; --violet-5:#8B5CF6; --violet-4:#A78BFA; --indigo:#6366F1;
+  --pink:#EC4899; --pink-d:#DB2777; --pink-l:#F472B6;
+  --amber:#FBBF24; --amber-d:#F59E0B; --orange:#F97316;
+  --teal:#0D9488; --green:#10B981;
+  --ink:#0C0820; --ink-2:#120A28; --ink-3:#221A3D;
+  --body:#475569; --body-2:#64748B;
+  --white:#FFFFFF; --lilac:#FAF7FF; --lilac-2:#F5F3FF; --line:#E2E8F0;
+  --grad:linear-gradient(135deg,#7C3AED 0%,#EC4899 100%);
+  --grad-warm:linear-gradient(120deg,#C4B5FD 0%,#F9A8D4 48%,#FDE68A 100%);
+  --dark-bg:linear-gradient(155deg,#221A3D 0%,#120A28 55%,#0C0820 100%);
+  --shadow-card:rgba(15,23,42,.07) 0 12px 38px 0;
+  --shadow-glow:rgba(124,58,237,.34) 0 18px 44px 0;
+  --shadow-panel:rgba(0,0,0,.48) 0 28px 64px 0, rgba(255,255,255,.06) 0 1px 0 0 inset;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Montserrat,Arial,sans-serif;background:var(--white);color:var(--body);font-size:16px;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--violet);color:#fff}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+
+/* ---------- scrollbar ---------- */
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--lilac-2)}
+::-webkit-scrollbar-thumb{background:var(--grad);border-radius:999px}
+
+/* ---------- progress bar ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad);z-index:200;box-shadow:0 0 14px rgba(236,72,153,.6)}
+
+/* ---------- cursor glow ---------- */
+#glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:1;
+  background:radial-gradient(circle,rgba(124,58,237,.20) 0%,rgba(236,72,153,.10) 40%,transparent 70%);
+  transform:translate(-50%,-50%);transition:opacity .4s;mix-blend-mode:screen;opacity:0}
+body.dark-zone #glow{opacity:1}
+
+/* ---------- nav ---------- */
+nav{position:fixed;top:0;left:0;right:0;z-index:150;padding:18px 0;transition:.4s cubic-bezier(.4,0,.2,1)}
+nav.solid{background:rgba(12,8,32,.82);backdrop-filter:blur(18px);padding:11px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav-in{max-width:1180px;margin:0 auto;padding:0 26px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.6px;color:#fff;font-size:17px}
+.logo-mark{width:38px;height:38px;border-radius:12px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:900;font-size:15px;letter-spacing:-1px;box-shadow:var(--shadow-glow);animation:markPulse 4.5s ease-in-out infinite}
+@keyframes markPulse{0%,100%{box-shadow:rgba(124,58,237,.34) 0 18px 44px 0}50%{box-shadow:rgba(236,72,153,.45) 0 18px 52px 0}}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{font-size:13.5px;font-weight:600;color:rgba(255,255,255,.78);padding:9px 14px;border-radius:999px;position:relative;transition:.28s}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,.08)}
+.nav-cta{background:var(--grad);color:#fff!important;font-weight:700!important;padding:11px 20px!important;border-radius:12px;box-shadow:var(--shadow-glow);transition:.3s}
+.nav-cta:hover{transform:translateY(-2px);background:var(--grad)!important}
+.burger{display:none;width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);cursor:pointer;flex-direction:column;gap:5px;align-items:center;justify-content:center}
+.burger span{width:17px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+.burger.on span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100vh;background:var(--dark-bg);display:flex;align-items:center;overflow:hidden;padding:130px 0 90px}
+.hero::after{content:"";position:absolute;inset:0;opacity:.05;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);
+  background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 40%,#000 10%,transparent 72%)}
+.orb{position:absolute;border-radius:50%;filter:blur(85px);opacity:.5;pointer-events:none}
+.o1{width:520px;height:520px;background:#7C3AED;top:-140px;left:-120px;animation:float1 17s ease-in-out infinite}
+.o2{width:440px;height:440px;background:#EC4899;bottom:-160px;right:-90px;animation:float2 21s ease-in-out infinite}
+.o3{width:320px;height:320px;background:#F59E0B;top:44%;right:22%;opacity:.22;animation:float3 25s ease-in-out infinite}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(120px,90px) scale(1.15)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-110px,-70px) scale(1.2)}}
+@keyframes float3{0%,100%{transform:translate(0,0)}33%{transform:translate(-90px,60px)}66%{transform:translate(70px,-50px)}}
+.wrap{max-width:1180px;margin:0 auto;padding:0 26px;position:relative;z-index:3;width:100%}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;backdrop-filter:blur(10px)}
+.dot{width:7px;height:7px;border-radius:50%;background:#10B981;box-shadow:0 0 0 0 rgba(16,185,129,.7);animation:ping 2.2s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(16,185,129,.7)}70%{box-shadow:0 0 0 11px rgba(16,185,129,0)}100%{box-shadow:0 0 0 0 rgba(16,185,129,0)}}
+h1{font-size:clamp(42px,6.2vw,76.8px);font-weight:800;line-height:.96;letter-spacing:-.055em;color:#fff;margin:26px 0 22px}
+.g-text{background:var(--grad-warm);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:220% auto;animation:shimmer 7s linear infinite}
+@keyframes shimmer{to{background-position:220% center}}
+.hero p.lead{font-size:19.2px;color:rgba(255,255,255,.82);max-width:560px;font-weight:400;line-height:1.62}
+.type-line{margin-top:20px;font-size:15px;font-weight:600;color:var(--violet-4);letter-spacing:.2px;min-height:24px}
+.type-line .cursor{display:inline-block;width:2px;height:17px;background:var(--pink-l);vertical-align:-2px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.btn{display:inline-flex;align-items:center;gap:9px;height:52px;padding:0 24px;border-radius:14px;font-weight:700;font-size:14.5px;cursor:pointer;border:none;transition:.32s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:var(--shadow-glow)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:rgba(236,72,153,.48) 0 22px 52px 0}
+.btn-primary span.arw{transition:.3s}
+.btn-primary:hover span.arw{transform:translateX(5px)}
+.btn-wa{background:linear-gradient(135deg,#25D366 0%,#128C7E 100%);color:#fff;border-radius:12px;box-shadow:rgba(37,211,102,.3) 0 4px 15px 0}
+.btn-wa:hover{transform:translateY(-3px);box-shadow:rgba(37,211,102,.45) 0 14px 34px 0}
+.btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.26)}
+.btn-ghost:hover{background:rgba(255,255,255,.1);transform:translateY(-3px)}
+
+/* hero card */
+.card-3d{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);border-radius:32px;padding:34px;box-shadow:var(--shadow-panel);backdrop-filter:blur(16px);transform-style:preserve-3d;transition:transform .18s ease-out}
+.card-3d .avatar{width:84px;height:84px;border-radius:26px;background:var(--grad);display:grid;place-items:center;color:#fff;font-weight:900;font-size:30px;letter-spacing:-2px;box-shadow:var(--shadow-glow);margin-bottom:20px}
+.card-3d h3{color:#fff;font-size:24px;font-weight:800;letter-spacing:-.9px}
+.card-3d .role{color:var(--violet-4);font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-top:6px}
+.card-3d ul{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:13px}
+.card-3d li{display:flex;align-items:flex-start;gap:11px;color:rgba(255,255,255,.86);font-size:14.2px;line-height:1.45}
+.tick{flex:0 0 20px;width:20px;height:20px;border-radius:50%;background:rgba(124,58,237,.28);border:1px solid rgba(167,139,250,.5);display:grid;place-items:center;color:#C4B5FD;font-size:11px;font-weight:800;margin-top:1px}
+.oab{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);display:flex;gap:26px}
+.oab div span{display:block}
+.oab .k{font-size:26px;font-weight:800;color:#fff;letter-spacing:-1px}
+.oab .l{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:3px}
+
+/* scroll hint */
+.scroll-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(255,255,255,.45);font-size:10.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.mouse{width:24px;height:38px;border:1.5px solid rgba(255,255,255,.35);border-radius:999px;position:relative}
+.mouse::after{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);width:3px;height:7px;border-radius:2px;background:#fff;animation:wheel 1.8s infinite}
+@keyframes wheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,13px)}}
+
+/* ---------- marquee ---------- */
+.marquee{background:var(--ink);padding:17px 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)}
+.mq-track{display:flex;gap:44px;width:max-content;animation:scrollX 34s linear infinite}
+.mq-track span{color:rgba(255,255,255,.42);font-size:12.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;white-space:nowrap;display:flex;align-items:center;gap:44px}
+.mq-track span::after{content:"◆";color:var(--violet-4);font-size:8px}
+@keyframes scrollX{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.sec{padding:110px 0}
+.sec-light{background:var(--white)}
+.sec-lilac{background:var(--lilac)}
+.sec-dark{background:var(--dark-bg);overflow:hidden}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--violet);margin-bottom:16px}
+.eyebrow::before{content:"";width:26px;height:2px;background:var(--grad);border-radius:2px}
+.sec-dark .eyebrow{color:var(--violet-4)}
+h2{font-size:clamp(30px,4.6vw,57.6px);font-weight:800;letter-spacing:-.05em;line-height:1.03;color:var(--ink)}
+.sec-dark h2{color:#fff}
+.sub{font-size:17.5px;color:var(--body);max-width:640px;margin-top:20px;line-height:1.62}
+.sec-dark .sub{color:rgba(255,255,255,.78)}
+.head-center{text-align:center;display:flex;flex-direction:column;align-items:center}
+.head-center .sub{margin-left:auto;margin-right:auto}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:.95fr 1.05fr;gap:64px;align-items:center}
+.about-visual{position:relative;aspect-ratio:1/1.05;border-radius:36px;background:var(--dark-bg);overflow:hidden;box-shadow:var(--shadow-panel);display:grid;place-items:center}
+.about-visual .ring{position:absolute;border:1px solid rgba(255,255,255,.12);border-radius:50%}
+.r1{width:70%;aspect-ratio:1;animation:spin 26s linear infinite}
+.r2{width:90%;aspect-ratio:1;animation:spin 38s linear infinite reverse}
+.r3{width:50%;aspect-ratio:1;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.r1::before,.r3::before{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--pink-l);box-shadow:0 0 16px var(--pink)}
+.r2::before{content:"";position:absolute;bottom:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 16px var(--amber-d)}
+.about-visual .mono{position:relative;z-index:2;font-size:clamp(64px,10vw,120px);font-weight:900;letter-spacing:-8px;background:var(--grad-warm);-webkit-background-clip:text;background-clip:text;color:transparent}
+.about p{font-size:16.8px;line-height:1.72;margin-bottom:18px}
+.about p strong{color:var(--ink);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+.chip{padding:8px 15px;border-radius:999px;background:var(--lilac-2);border:1px solid #EDE9FE;color:var(--violet);font-size:12.5px;font-weight:700;transition:.28s}
+.chip:hover{background:var(--grad);color:#fff;border-color:transparent;transform:translateY(-2px);box-shadow:rgba(124,58,237,.3) 0 8px 20px 0}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:60px}
+.stat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:30px 24px;transition:.35s}
+.stat:hover{transform:translateY(-6px);background:rgba(255,255,255,.1);box-shadow:var(--shadow-panel)}
+.stat .n{font-size:46px;font-weight:800;letter-spacing:-2.4px;background:var(--grad-warm);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
+.stat .t{margin-top:10px;font-size:13px;font-weight:600;color:rgba(255,255,255,.72);line-height:1.4}
+
+/* ---------- services ---------- */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px;box-shadow:var(--shadow-card);position:relative;overflow:hidden;transition:.4s cubic-bezier(.4,0,.2,1)}
+.card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:.45s}
+.card:hover{transform:translateY(-9px);box-shadow:rgba(15,23,42,.13) 0 26px 60px 0;border-color:#EDE9FE}
+.card:hover::before{transform:scaleX(1)}
+.ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:23px;margin-bottom:20px;transition:.4s}
+.card:hover .ic{transform:rotate(-8deg) scale(1.07)}
+.ic-v{background:linear-gradient(135deg,#7C3AED,#6366F1);box-shadow:rgba(124,58,237,.34) 0 10px 26px 0}
+.ic-p{background:linear-gradient(135deg,#EC4899,#DB2777);box-shadow:rgba(236,72,153,.34) 0 10px 26px 0}
+.ic-a{background:linear-gradient(135deg,#F59E0B,#EA580C);box-shadow:rgba(245,158,11,.34) 0 10px 26px 0}
+.ic-t{background:linear-gradient(135deg,#10B981,#0D9488);box-shadow:rgba(13,148,136,.34) 0 10px 26px 0}
+.ic-i{background:linear-gradient(135deg,#6366F1,#0891B2);box-shadow:rgba(99,102,241,.34) 0 10px 26px 0}
+.ic-r{background:linear-gradient(135deg,#A78BFA,#EC4899);box-shadow:rgba(167,139,250,.34) 0 10px 26px 0}
+.card h3{font-size:20px;font-weight:800;letter-spacing:-.6px;color:var(--ink);margin-bottom:11px}
+.card p{font-size:14.6px;line-height:1.62;color:var(--body-2)}
+.badge{position:absolute;top:22px;right:22px;padding:5px 11px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:#fff;background:var(--grad)}
+
+/* ---------- artists ---------- */
+.art-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:56px}
+.art{border-radius:24px;padding:30px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);transition:.4s;position:relative;overflow:hidden}
+.art::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;filter:blur(60px);opacity:0;transition:.5s;top:-60px;right:-60px}
+.art:hover::after{opacity:.55}
+.art.a1::after{background:#7C3AED}.art.a2::after{background:#EC4899}.art.a3::after{background:#F59E0B}
+.art:hover{transform:translateY(-8px);background:rgba(255,255,255,.1);box-shadow:var(--shadow-panel)}
+.art .tag{display:inline-block;padding:5px 12px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;margin-bottom:18px;position:relative;z-index:2}
+.art.a1 .tag{background:linear-gradient(135deg,#7C3AED,#6366F1)}
+.art.a2 .tag{background:linear-gradient(135deg,#EC4899,#F97316)}
+.art.a3 .tag{background:linear-gradient(135deg,#F59E0B,#EA580C)}
+.art h3{color:#fff;font-size:21px;font-weight:800;letter-spacing:-.6px;margin-bottom:10px;position:relative;z-index:2}
+.art p{color:rgba(255,255,255,.78);font-size:14.4px;line-height:1.62;position:relative;z-index:2}
+
+/* ---------- process ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:60px;position:relative}
+.steps::before{content:"";position:absolute;top:26px;left:8%;right:8%;height:2px;background:linear-gradient(90deg,#7C3AED,#EC4899,#F59E0B);opacity:.25}
+.step{text-align:center;position:relative}
+.step .num{width:54px;height:54px;border-radius:50%;background:#fff;border:2px solid #EDE9FE;display:grid;place-items:center;margin:0 auto 20px;font-weight:800;font-size:17px;color:var(--violet);position:relative;z-index:2;transition:.4s}
+.step:hover .num{background:var(--grad);color:#fff;border-color:transparent;transform:scale(1.12);box-shadow:var(--shadow-glow)}
+.step h4{font-size:16.5px;font-weight:800;color:var(--ink);letter-spacing:-.4px;margin-bottom:9px}
+.step p{font-size:14px;color:var(--body-2);line-height:1.58}
+
+/* ---------- CTA ---------- */
+.cta-panel{background:var(--dark-bg);border-radius:40px;padding:70px 50px;text-align:center;position:relative;overflow:hidden;box-shadow:var(--shadow-panel)}
+.cta-panel .orb{filter:blur(70px)}
+.cta-panel h2{margin-bottom:18px}
+.cta-panel .sub{margin:0 auto}
+.cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:38px;position:relative;z-index:3}
+.contact-line{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin-top:34px;position:relative;z-index:3}
+.contact-line a{color:rgba(255,255,255,.72);font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;transition:.3s}
+.contact-line a:hover{color:#fff}
+
+/* ---------- notícias ---------- */
+.news-top{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;flex-wrap:wrap}
+.news-meta{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--body-2);white-space:nowrap}
+.live{width:8px;height:8px;border-radius:50%;background:#EC4899;box-shadow:0 0 0 0 rgba(236,72,153,.7);animation:ping 2.2s infinite}
+.news-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px}
+.news{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:var(--shadow-card);position:relative;overflow:hidden;transition:.4s cubic-bezier(.4,0,.2,1)}
+.news::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:.45s}
+.news:hover{transform:translateY(-8px);box-shadow:rgba(15,23,42,.13) 0 26px 60px 0;border-color:#EDE9FE}
+.news:hover::before{transform:scaleX(1)}
+.news.feat{grid-column:span 2;background:var(--dark-bg);border-color:rgba(255,255,255,.12);box-shadow:var(--shadow-panel)}
+.news .tagn{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;padding:5px 12px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:var(--grad);margin-bottom:16px}
+.news.feat .tagn{background:linear-gradient(135deg,#F59E0B,#EA580C)}
+.news h3{font-size:18px;font-weight:800;letter-spacing:-.5px;color:var(--ink);line-height:1.28;margin-bottom:11px}
+.news.feat h3{color:#fff;font-size:28px;letter-spacing:-1.1px}
+.news p{font-size:14.2px;line-height:1.6;color:var(--body-2);flex:1}
+.news.feat p{color:rgba(255,255,255,.8);font-size:15.4px}
+.news .foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:12px;font-weight:600;color:var(--body-2)}
+.news.feat .foot{border-top-color:rgba(255,255,255,.14);color:rgba(255,255,255,.6)}
+.news .go{font-weight:700;color:var(--violet);display:inline-flex;align-items:center;gap:6px;transition:.3s}
+.news.feat .go{color:var(--violet-4)}
+.news:hover .go{gap:11px}
+.sk{pointer-events:none}
+.sk .ln{height:13px;border-radius:6px;margin-bottom:10px;background:linear-gradient(90deg,#EEEAF7 25%,#F7F4FD 50%,#EEEAF7 75%);background-size:200% 100%;animation:shine 1.3s linear infinite}
+.sk .ln.t{height:20px;width:85%;margin-bottom:16px}
+.sk .ln.s{width:60%}
+@keyframes shine{to{background-position:-200% 0}}
+.news-note{margin-top:26px;font-size:12.6px;color:var(--body-2);text-align:center}
+.news-note a{color:var(--violet);font-weight:700}
+.news-err{grid-column:1/-1;text-align:center;padding:44px 24px;border:1px dashed #DDD6FE;border-radius:20px;background:var(--lilac-2);color:var(--body)}
+@media(max-width:960px){.news-grid{grid-template-columns:repeat(2,1fr)}.news.feat{grid-column:span 2}}
+@media(max-width:600px){.news-grid{grid-template-columns:1fr}.news.feat{grid-column:span 1}.news.feat h3{font-size:22px}}
+
+/* ---------- footer ---------- */
+footer{background:var(--ink);padding:60px 0 34px;color:rgba(255,255,255,.6)}
+.f-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;padding-bottom:38px;border-bottom:1px solid rgba(255,255,255,.09)}
+footer h5{color:#fff;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:16px}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+footer a{font-size:14px;transition:.28s}
+footer a:hover{color:#fff}
+footer p{font-size:14px;line-height:1.68;max-width:330px;margin-top:16px}
+.socials{display:flex;gap:10px;margin-top:20px}
+.socials a{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.13);display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;transition:.3s}
+.socials a:hover{background:var(--grad);border-color:transparent;transform:translateY(-3px);box-shadow:var(--shadow-glow)}
+.copy{padding-top:26px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12.6px}
+
+/* ---------- float wa ---------- */
+.fab{position:fixed;right:22px;bottom:22px;z-index:140;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:grid;place-items:center;box-shadow:rgba(37,211,102,.4) 0 10px 30px 0;transform:scale(0);transition:.4s cubic-bezier(.34,1.56,.64,1)}
+.fab.on{transform:scale(1)}
+.fab:hover{transform:scale(1.1)}
+.fab svg{width:28px;height:28px;fill:#fff}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(34px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.09s}.d2{transition-delay:.18s}.d3{transition-delay:.27s}.d4{transition-delay:.36s}
+
+@media(max-width:960px){
+  .hero-grid,.about{grid-template-columns:1fr;gap:44px}
+  .grid3,.art-grid,.steps,.stats{grid-template-columns:repeat(2,1fr)}
+  .steps::before{display:none}
+  .f-grid{grid-template-columns:1fr}
+  .nav-links{position:fixed;top:66px;left:16px;right:16px;background:rgba(12,8,32,.97);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.1);border-radius:20px;flex-direction:column;padding:16px;gap:4px;opacity:0;pointer-events:none;transform:translateY(-12px);transition:.32s}
+  .nav-links.open{opacity:1;pointer-events:all;transform:none}
+  .nav-links a{width:100%;text-align:center}
+  .burger{display:flex}
+  #glow{display:none}
+}
+@media(max-width:600px){
+  .grid3,.art-grid,.steps,.stats{grid-template-columns:1fr}
+  .sec{padding:78px 0}
+  .cta-panel{padding:48px 24px;border-radius:28px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div id="glow"></div>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a href="#top" class="logo"><span class="logo-mark">DD</span> Dante Darelli</a>
+    <div class="nav-links" id="links">
+      <a href="#sobre">Sobre</a>
+      <a href="#atuacao">Atuação</a>
+      <a href="#artistas">Artistas</a>
+      <a href="#metodo">Método</a>
+      <a href="#noticias">Notícias</a>
+      <a href="#contato" class="nav-cta">Falar comigo</a>
+    </div>
+    <div class="burger" id="burger"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="pill rv in"><span class="dot"></span> Advocacia consultiva empresarial</span>
+        <h1 class="rv in">Contrato não é<br>burocracia.<br><span class="g-text">É estratégia.</span></h1>
+        <p class="lead rv in">Advogado dedicado ao desenvolvimento de novos negócios e à sua consolidação jurídica — da estruturação da operação ao contrato que a sustenta.</p>
+        <div class="type-line rv in"><span id="typed"></span><span class="cursor"></span></div>
+        <div class="btns rv in">
+          <a href="#contato" class="btn btn-primary">Iniciar uma conversa <span class="arw">→</span></a>
+          <a href="#atuacao" class="btn btn-ghost">Ver áreas de atuação</a>
+        </div>
+      </div>
+      <div class="card-3d rv in" id="tilt">
+        <div class="avatar">DD</div>
+        <h3>Dante Darelli</h3>
+        <div class="role">Advogado · 35 anos</div>
+        <ul>
+          <li><span class="tick">✓</span> Pós-graduado em Direito Civil</li>
+          <li><span class="tick">✓</span> Pós-graduado em Direito Empresarial</li>
+          <li><span class="tick">✓</span> Consultivo empresarial e contratos</li>
+          <li><span class="tick">✓</span> Empresário de artistas</li>
+        </ul>
+        <div class="oab">
+          <div><span class="k" data-count="2">0</span><span class="l">Pós-graduações</span></div>
+          <div><span class="k" data-count="360" data-suffix="°">0</span><span class="l">Visão de negócio</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="mouse"></div>Role</div>
+</header>
+
+<div class="marquee">
+  <div class="mq-track">
+    <span>Direito Empresarial</span><span>Contratos</span><span>Novos Negócios</span><span>Societário</span><span>Direito Civil</span><span>Gestão de Artistas</span><span>Compliance Contratual</span><span>Parcerias</span>
+    <span>Direito Empresarial</span><span>Contratos</span><span>Novos Negócios</span><span>Societário</span><span>Direito Civil</span><span>Gestão de Artistas</span><span>Compliance Contratual</span><span>Parcerias</span>
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section class="sec sec-light" id="sobre">
+  <div class="wrap">
+    <div class="about">
+      <div class="about-visual rv">
+        <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+        <div class="mono">DD</div>
+      </div>
+      <div>
+        <span class="eyebrow rv">Quem sou</span>
+        <h2 class="rv">Um advogado que<br>pensa como <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">sócio</span>.</h2>
+        <div class="rv d1" style="margin-top:26px">
+          <p>Tenho 35 anos, sou <strong>advogado</strong> e <strong>pós-graduado em Direito Civil e Direito Empresarial</strong>. Atuo na área consultiva empresarial, com foco no desenvolvimento de novos negócios e na respectiva consolidação por meio do contrato empresarial.</p>
+          <p>Minha leitura é simples: o contrato bem construído não trava o negócio — ele é o que permite que o negócio cresça com previsibilidade. Por isso trabalho junto da operação, entendendo a lógica econômica antes de redigir qualquer cláusula.</p>
+          <p>Além da advocacia, atuo como <strong>empresário de artistas</strong>, cuidando de carreira, estrutura contratual e desenvolvimento comercial — uma frente que me deu vivência prática de negociação e construção de marca.</p>
+        </div>
+        <div class="chips rv d2">
+          <span class="chip">Consultivo empresarial</span>
+          <span class="chip">Contratos empresariais</span>
+          <span class="chip">Novos negócios</span>
+          <span class="chip">Direito civil</span>
+          <span class="chip">Societário</span>
+          <span class="chip">Negociação</span>
+          <span class="chip">Gestão de carreira artística</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ATUAÇÃO -->
+<section class="sec sec-lilac" id="atuacao">
+  <div class="wrap">
+    <div class="head-center">
+      <span class="eyebrow rv">Atuação</span>
+      <h2 class="rv">Onde eu entro no seu negócio</h2>
+      <p class="sub rv d1">Da ideia à assinatura: estruturação jurídica pensada para viabilizar a operação, não para engessá-la.</p>
+    </div>
+    <div class="grid3">
+      <div class="card rv"><span class="badge">Foco</span><div class="ic ic-v">⚖️</div><h3>Contratos empresariais</h3><p>Redação, revisão e negociação de contratos que traduzem com precisão o acordo comercial e distribuem risco de forma consciente entre as partes.</p></div>
+      <div class="card rv d1"><div class="ic ic-p">🚀</div><h3>Novos negócios</h3><p>Acompanhamento jurídico do desenvolvimento de operações novas: modelagem, escolha de estrutura, formalização e consolidação do que foi construído.</p></div>
+      <div class="card rv d2"><div class="ic ic-a">🤝</div><h3>Parcerias e alianças</h3><p>Estruturação de parcerias comerciais, joint ventures e acordos de colaboração, com atenção a exclusividade, metas, saída e propriedade dos resultados.</p></div>
+      <div class="card rv"><div class="ic ic-t">🏛️</div><h3>Societário</h3><p>Constituição de sociedades, acordo de sócios, entrada e saída de participantes e governança adequada ao tamanho real da empresa.</p></div>
+      <div class="card rv d1"><div class="ic ic-i">📑</div><h3>Consultivo permanente</h3><p>Suporte contínuo à tomada de decisão empresarial, com pareceres objetivos e leitura de risco em linguagem de negócio, não em juridiquês.</p></div>
+      <div class="card rv d2"><div class="ic ic-r">🎤</div><h3>Entretenimento e imagem</h3><p>Contratos de cessão de imagem, empresariamento, apresentações, patrocínio e licenciamento — a interseção entre direito e carreira artística.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ARTISTAS -->
+<section class="sec sec-dark" id="artistas">
+  <div class="orb o1" style="opacity:.28"></div><div class="orb o2" style="opacity:.28"></div>
+  <div class="wrap">
+    <div class="head-center">
+      <span class="eyebrow rv">Segunda frente</span>
+      <h2 class="rv">Empresariamento<br>de <span class="g-text">artistas</span></h2>
+      <p class="sub rv d1">Direito e carreira caminham juntos. Atuo na gestão de artistas unindo estrutura contratual, desenvolvimento comercial e visão de longo prazo.</p>
+    </div>
+    <div class="art-grid">
+      <div class="art a1 rv"><span class="tag">Carreira</span><h3>Estratégia e posicionamento</h3><p>Planejamento de carreira com metas claras: onde o artista está hoje, onde pode chegar e quais decisões comerciais sustentam esse caminho.</p></div>
+      <div class="art a2 rv d1"><span class="tag">Negócio</span><h3>Contratos e receita</h3><p>Cachês, patrocínios, licenciamento, direitos autorais e imagem — cada fonte de receita devidamente formalizada e protegida.</p></div>
+      <div class="art a3 rv d2"><span class="tag">Rede</span><h3>Parcerias e conexões</h3><p>Aproximação com marcas, produtores e plataformas, construindo relações que geram oportunidades reais e recorrentes.</p></div>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><div class="n" data-count="2">0</div><div class="t">Frentes de atuação integradas</div></div>
+      <div class="stat rv d1"><div class="n" data-count="100" data-suffix="%">0</div><div class="t">Atendimento direto, sem intermediários</div></div>
+      <div class="stat rv d2"><div class="n" data-count="35">0</div><div class="t">Anos — e a energia de quem está construindo</div></div>
+      <div class="stat rv d3"><div class="n" data-count="24" data-suffix="h">0</div><div class="t">Retorno em até um dia útil</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTODO -->
+<section class="sec sec-light" id="metodo">
+  <div class="wrap">
+    <div class="head-center">
+      <span class="eyebrow rv">Método</span>
+      <h2 class="rv">Como eu trabalho</h2>
+      <p class="sub rv d1">Um processo simples, previsível e sem surpresa no meio do caminho.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><div class="num">01</div><h4>Diagnóstico</h4><p>Entendo o negócio, a operação e o objetivo comercial antes de olhar para qualquer documento.</p></div>
+      <div class="step rv d1"><div class="num">02</div><h4>Desenho</h4><p>Proponho a estrutura jurídica que viabiliza o objetivo com o menor atrito possível.</p></div>
+      <div class="step rv d2"><div class="num">03</div><h4>Formalização</h4><p>Redijo e negocio os instrumentos, alinhando linguagem contratual e realidade da operação.</p></div>
+      <div class="step rv d3"><div class="num">04</div><h4>Consolidação</h4><p>Acompanho a execução, ajusto o que precisa ser ajustado e mantenho o negócio protegido.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="sec sec-lilac" id="contato">
+  <div class="wrap">
+    <div class="cta-panel rv">
+      <div class="orb o1" style="opacity:.35"></div><div class="orb o2" style="opacity:.35"></div>
+      <span class="eyebrow">Vamos conversar</span>
+      <h2>Tem um negócio<br>para <span class="g-text">estruturar?</span></h2>
+      <p class="sub">Me conte o contexto. A primeira conversa serve para entender se e como eu posso ajudar — sem compromisso.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/5511999999999?text=Ol%C3%A1%20Dante%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" class="btn btn-wa">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="#fff"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01c-1.52 0-3.02-.41-4.32-1.18l-.31-.18-3.21.84.86-3.13-.2-.32a8.2 8.2 0 01-1.26-4.37c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.19 8.19 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23z"/></svg>
+          Chamar no WhatsApp
+        </a>
+        <a href="mailto:dante.darelli@hotmail.com?subject=Contato%20pelo%20site" class="btn btn-primary">Enviar e-mail <span class="arw">→</span></a>
+      </div>
+      <div class="contact-line">
+        <a href="mailto:dante.darelli@hotmail.com">✉ dante.darelli@hotmail.com</a>
+        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener">✆ WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTÍCIAS -->
+<section class="sec sec-light" id="noticias">
+  <div class="wrap">
+    <div class="news-top">
+      <div>
+        <span class="eyebrow rv">Radar</span>
+        <h2 class="rv">Tecnologia<br>de <span style="background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent">hoje</span></h2>
+        <p class="sub rv d1">As 5 últimas notícias de tecnologia do dia. Inovação muda contrato — acompanhar o setor faz parte do trabalho.</p>
+      </div>
+      <div class="news-meta rv d2"><span class="live"></span><span id="news-date">Atualizando…</span></div>
+    </div>
+    <div class="news-grid" id="news-grid">
+      <article class="news feat sk"><div class="ln t"></div><div class="ln"></div><div class="ln"></div><div class="ln s"></div></article>
+      <article class="news sk"><div class="ln t"></div><div class="ln"></div><div class="ln s"></div></article>
+      <article class="news sk"><div class="ln t"></div><div class="ln"></div><div class="ln s"></div></article>
+      <article class="news sk"><div class="ln t"></div><div class="ln"></div><div class="ln s"></div></article>
+      <article class="news sk"><div class="ln t"></div><div class="ln"></div><div class="ln s"></div></article>
+    </div>
+    <p class="news-note rv">Fonte: <a href="https://www.noticiasaominuto.com.br/rss/tech" target="_blank" rel="noopener">Notícias ao Minuto — Tech</a>. Conteúdo de terceiros, atualizado automaticamente a cada carregamento da página.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="#top" class="logo"><span class="logo-mark">DD</span> Dante Darelli</a>
+        <p>Advocacia consultiva empresarial, contratos e desenvolvimento de novos negócios. Empresariamento de artistas.</p>
+        <div class="socials">
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="Instagram">ig</a>
+          <a href="mailto:dante.darelli@hotmail.com" aria-label="E-mail">@</a>
+        </div>
+      </div>
+      <div>
+        <h5>Navegação</h5>
+        <ul><li><a href="#sobre">Sobre</a></li><li><a href="#atuacao">Atuação</a></li><li><a href="#artistas">Artistas</a></li><li><a href="#metodo">Método</a></li><li><a href="#noticias">Notícias</a></li><li><a href="#contato">Contato</a></li></ul>
+      </div>
+      <div>
+        <h5>Contato</h5>
+        <ul><li><a href="mailto:dante.darelli@hotmail.com">dante.darelli@hotmail.com</a></li><li><a href="https://wa.me/5511999999999" target="_blank" rel="noopener">WhatsApp</a></li></ul>
+      </div>
+    </div>
+    <div class="copy">
+      <span>© <span id="year"></span> Dante Darelli. Todos os direitos reservados.</span>
+      <span>Este site tem caráter meramente informativo, em conformidade com o Código de Ética e Disciplina da OAB.</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/5511999999999?text=Ol%C3%A1%20Dante%2C%20vim%20pelo%20seu%20site." target="_blank" rel="noopener" class="fab" id="fab" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.06 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01c-1.52 0-3.02-.41-4.32-1.18l-.31-.18-3.21.84.86-3.13-.2-.32a8.2 8.2 0 01-1.26-4.37c0-4.54 3.7-8.23 8.25-8.23 2.2 0 4.27.86 5.83 2.41a8.19 8.19 0 012.41 5.83c0 4.54-3.7 8.23-8.24 8.23z"/></svg>
+</a>
+
+<script>
+document.getElementById('year').textContent=new Date().getFullYear();
+
+/* progress + nav */
+const nav=document.getElementById('nav'),prog=document.getElementById('progress'),fab=document.getElementById('fab');
+function onScroll(){
+  const st=window.scrollY,h=document.documentElement.scrollHeight-innerHeight;
+  prog.style.width=(st/h*100)+'%';
+  nav.classList.toggle('solid',st>60);
+  fab.classList.toggle('on',st>500);
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* burger */
+const burger=document.getElementById('burger'),links=document.getElementById('links');
+burger.addEventListener('click',()=>{burger.classList.toggle('on');links.classList.toggle('open')});
+links.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{burger.classList.remove('on');links.classList.remove('open')}));
+
+/* reveal */
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.14,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.rv:not(.in)').forEach(el=>io.observe(el));
+
+/* counters */
+const cio=new IntersectionObserver((es)=>{es.forEach(e=>{
+  if(!e.isIntersecting)return;cio.unobserve(e.target);
+  const el=e.target,end=+el.dataset.count,suf=el.dataset.suffix||'';let t0=null;
+  const step=(t)=>{if(!t0)t0=t;const p=Math.min((t-t0)/1400,1);
+    el.textContent=Math.floor(end*(1-Math.pow(1-p,3)))+suf;
+    if(p<1)requestAnimationFrame(step);else el.textContent=end+suf};
+  requestAnimationFrame(step)})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+/* typewriter */
+const words=['Contratos empresariais','Desenvolvimento de novos negócios','Direito civil e empresarial','Empresariamento de artistas'];
+const out=document.getElementById('typed');let wi=0,ci=0,del=false;
+(function type(){
+  const w=words[wi];
+  out.textContent=del?w.slice(0,--ci):w.slice(0,++ci);
+  let d=del?38:72;
+  if(!del&&ci===w.length){d=1800;del=true}
+  else if(del&&ci===0){del=false;wi=(wi+1)%words.length;d=320}
+  setTimeout(type,d)
+})();
+
+/* cursor glow + dark zones */
+const glow=document.getElementById('glow');
+addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';
+  const el=document.elementFromPoint(e.clientX,e.clientY);
+  document.body.classList.toggle('dark-zone',!!(el&&el.closest('.hero,.sec-dark,.cta-panel,footer')));
+},{passive:true});
+
+/* tilt */
+const tilt=document.getElementById('tilt');
+if(tilt&&matchMedia('(pointer:fine)').matches){
+  tilt.addEventListener('mousemove',e=>{const r=tilt.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+    tilt.style.transform=`perspective(900px) rotateY(${x*9}deg) rotateX(${-y*9}deg) translateY(-6px)`});
+  tilt.addEventListener('mouseleave',()=>{tilt.style.transform='perspective(900px) rotateY(0) rotateX(0)'});
+}
+
+/* ---------- feed de notícias ---------- */
+(function(){
+  const FEED='https://www.noticiasaominuto.com.br/rss/tech';
+  const grid=document.getElementById('news-grid'),dateEl=document.getElementById('news-date');
+  const MAX=5;
+
+  const proxies=[
+    u=>'https://api.allorigins.win/raw?url='+encodeURIComponent(u),
+    u=>'https://corsproxy.io/?'+encodeURIComponent(u),
+    u=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u)
+  ];
+
+  const esc=s=>(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const strip=s=>{const d=document.createElement('div');d.innerHTML=s||'';return (d.textContent||'').replace(/\s+/g,' ').trim()};
+  const clamp=(s,n)=>s.length>n?s.slice(0,n).replace(/\s+\S*$/,'')+'…':s;
+  const sameDay=(a,b)=>a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();
+  const hhmm=d=>d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+
+  async function getFeed(){
+    for(const p of proxies){
+      try{
+        const r=await fetch(p(FEED),{cache:'no-store'});
+        if(!r.ok)continue;
+        const t=await r.text();
+        if(t.indexOf('<item')===-1)continue;
+        return t;
+      }catch(e){}
+    }
+    throw new Error('feed indisponível');
+  }
+
+  function parse(xml){
+    const doc=new DOMParser().parseFromString(xml,'text/xml');
+    return [...doc.querySelectorAll('item')].map(it=>{
+      const g=t=>{const n=it.querySelector(t);return n?n.textContent:''};
+      const d=new Date(g('pubDate'));
+      return{title:strip(g('title')),link:(g('link')||'').trim(),desc:strip(g('description')),date:isNaN(d)?null:d};
+    }).filter(i=>i.title&&i.link);
+  }
+
+  function render(items,onlyToday){
+    grid.innerHTML=items.map((it,i)=>{
+      const feat=i===0?' feat':'';
+      const tag=i===0?'Destaque do dia':'Tech';
+      const hora=it.date?hhmm(it.date):'';
+      return `<article class="news${feat} rv in">
+        <span class="tagn">${tag}</span>
+        <h3>${esc(it.title)}</h3>
+        <p>${esc(clamp(it.desc||'Clique para ler a matéria completa na fonte.',i===0?230:130))}</p>
+        <div class="foot"><span>${hora?'🕐 '+hora:'Notícias ao Minuto'}</span>
+        <a class="go" href="${esc(it.link)}" target="_blank" rel="noopener nofollow">Ler <span>→</span></a></div>
+      </article>`;
+    }).join('');
+    dateEl.textContent=(onlyToday?'Hoje · ':'Últimas · ')+new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
+  }
+
+  getFeed().then(xml=>{
+    const all=parse(xml),hoje=new Date();
+    const doDia=all.filter(i=>i.date&&sameDay(i.date,hoje));
+    const onlyToday=doDia.length>=1;
+    let sel=(onlyToday?doDia:all).slice(0,MAX);
+    if(onlyToday&&sel.length<MAX){
+      const ids=new Set(sel.map(i=>i.link));
+      sel=sel.concat(all.filter(i=>!ids.has(i.link)).slice(0,MAX-sel.length));
+    }
+    if(!sel.length)throw new Error('sem itens');
+    render(sel,onlyToday&&doDia.length>=MAX);
+  }).catch(()=>{
+    grid.innerHTML=`<div class="news-err">Não foi possível carregar as notícias agora.
+      <br><a href="https://www.noticiasaominuto.com.br/tech" target="_blank" rel="noopener" style="color:var(--violet);font-weight:700">Ver direto na fonte →</a></div>`;
+    dateEl.textContent='Indisponível';
+  });
+})();
+
+/* parallax orbs on hero */
+const heroOrbs=document.querySelectorAll('.hero .orb');
+addEventListener('scroll',()=>{const y=window.scrollY;
+  heroOrbs.forEach((o,i)=>{o.style.marginTop=(y*(0.08+i*0.05))+'px'})},{passive:true});
+</script>
+</body>
+</html>
