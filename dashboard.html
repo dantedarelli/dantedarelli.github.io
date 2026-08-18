@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Financeiro — Catálogo de Cursos · Clarify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ---- Identidade visual Clarify ---- */
+    --roxo:            #7C3AED;
+    --roxo-500:        #8B5CF6;
+    --roxo-400:        #A78BFA;
+    --indigo:          #4F46E5;
+    --indigo-dark:     #4338CA;
+    --rosa:            #EC4899;
+    --rosa-dark:       #DB2777;
+    --rosa-light:      #F472B6;
+    --ambar:           #F59E0B;
+    --ambar-dark:      #D97706;
+    --teal:            #0D9488;
+    --verde:           #10B981;
+    --ciano:           #0891B2;
+    --alerta:          #EA580C;
+
+    --grad-primary:     linear-gradient(135deg, #7C3AED, #EC4899);
+    --grad-primary-text:linear-gradient(120deg, #C4B5FD, #F9A8D4, #FDE68A);
+    --grad-dark-bg:      linear-gradient(155deg, #221A3D, #120A28, #0C0820);
+
+    --ink:              #0C0820;
+    --ink-body:         #475569;
+    --ink-muted:        #64748B;
+    --lilac-bg:         #FAF7FF;
+    --lilac-bg-2:       #F5F3FF;
+    --grey-blue:        #F0F4F7;
+    --border-light:     #E2E8F0;
+    --border-light-2:   #D5DEE2;
+
+    --dark-text:        #FFFFFF;
+    --dark-text-body:   rgba(255,255,255,0.88);
+    --dark-text-muted:  #A3A3C2;
+    --dark-card-bg:     rgba(255,255,255,0.06);
+    --dark-card-bg-2:   rgba(255,255,255,0.10);
+    --dark-card-border: rgba(255,255,255,0.12);
+
+    --shadow-card:       0 12px 38px 0 rgba(15,23,42,0.07);
+    --shadow-glow-roxo:  0 18px 44px 0 rgba(124,58,237,0.34);
+    --shadow-dark-panel: 0 28px 64px 0 rgba(0,0,0,0.48), inset 0 1px 0 0 rgba(255,255,255,0.06);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    font-family: 'Montserrat', Arial, sans-serif;
+    background: #FFFFFF;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,h4 { font-family: 'Montserrat', Arial, sans-serif; margin:0; }
+  p { margin:0; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Pills / badges ---------- */
+  .pill {
+    display:inline-flex; align-items:center; gap:6px;
+    padding: 6px 14px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase;
+    color: #fff;
+  }
+  .pill-outline {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.22); color: var(--dark-text-body);
+  }
+
+  /* ---------- Sections ---------- */
+  section.band { padding: 56px 0; }
+  section.band.dark { background: var(--grad-dark-bg); color: var(--dark-text); }
+  section.band.white { background: #FFFFFF; }
+  section.band.lilac { background: var(--lilac-bg); }
+
+  .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--roxo); margin-bottom: 10px;
+  }
+  .band.dark .eyebrow { color: var(--roxo-400); }
+
+  h2.section-title {
+    font-size: clamp(26px, 4vw, 40px); font-weight: 800; letter-spacing: -1.6px;
+    margin: 0 0 8px; color: var(--ink);
+  }
+  .band.dark h2.section-title { color: var(--dark-text); }
+  p.section-sub {
+    margin: 0 0 28px; color: var(--ink-body); font-size: 15px; max-width: 760px; line-height: 1.55;
+  }
+  .band.dark p.section-sub { color: var(--dark-text-muted); }
+
+  /* ---------- Hero ---------- */
+  .hero-top { display:flex; align-items:flex-start; justify-content:space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
+  h1.hero-title {
+    font-size: clamp(34px, 6.4vw, 64px); font-weight: 800; line-height: 0.98; letter-spacing: -2.6px;
+    margin: 0 0 16px; max-width: 720px;
+  }
+  h1.hero-title .grad {
+    background: var(--grad-primary-text); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  p.hero-sub { font-size: clamp(15px, 1.6vw, 18px); color: var(--dark-text-body); max-width: 620px; line-height: 1.55; margin-bottom: 18px; }
+  .hero-meta { color: var(--dark-text-muted); font-size: 13px; }
+
+  /* ---------- KPI (hero, dark) ---------- */
+  .kpi-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+  @media (max-width: 980px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .kpi-grid { grid-template-columns: 1fr; } }
+  .kpi-tile {
+    background: var(--dark-card-bg); border: 1px solid var(--dark-card-border); border-radius: 20px;
+    padding: 20px 20px 18px; box-shadow: var(--shadow-dark-panel);
+  }
+  .kpi-tile .kpi-icon {
+    width: 34px; height: 34px; border-radius: 12px; display:flex; align-items:center; justify-content:center;
+    background: var(--grad-primary); margin-bottom: 14px;
+  }
+  .kpi-tile .kpi-icon svg { width:18px; height:18px; }
+  .kpi-tile .label { font-size: 12.5px; color: var(--dark-text-muted); margin-bottom: 8px; font-weight: 500; }
+  .kpi-tile .value {
+    font-size: 25px; font-weight: 800; letter-spacing: -0.8px; line-height:1.2;
+    background: var(--grad-primary-text); -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .kpi-tile .detail { font-size: 12px; color: var(--dark-text-muted); margin-top: 8px; }
+
+  /* ---------- Insight cards ---------- */
+  .insight-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 860px) { .insight-grid { grid-template-columns: 1fr; } }
+  .insight-card {
+    background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 20px;
+    padding: 22px 24px; box-shadow: var(--shadow-card);
+  }
+  .insight-card .dot {
+    width: 34px; height: 34px; border-radius: 12px; margin-bottom: 14px;
+    background: var(--grad-primary); display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:800; font-size:14px;
+  }
+  .insight-card h3 { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; margin: 0 0 10px; color: var(--ink); }
+  .insight-card p { font-size: 14px; line-height: 1.6; color: var(--ink-body); margin:0; }
+  .insight-card p strong { color: var(--ink); font-weight: 700; }
+
+  /* ---------- Chart cards ---------- */
+  .chart-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 980px) { .chart-grid { grid-template-columns: 1fr; } }
+  .chart-card {
+    background: #FFFFFF; border: 1px solid var(--border-light); border-radius: 20px;
+    padding: 22px 22px 16px; box-shadow: var(--shadow-card);
+  }
+  .chart-card.full { grid-column: 1 / -1; }
+  .chart-card h3 { font-size: 16px; margin: 0 0 3px; font-weight:800; letter-spacing:-0.3px; color: var(--ink); }
+  .chart-card p.caption { font-size: 12.5px; color: var(--ink-muted); margin: 0 0 14px; }
+  .chart-card svg { width:100%; height:auto; display:block; overflow: visible; }
+
+  .bar-label { font-size: 11.5px; fill: var(--ink-body); font-family:'Montserrat',Arial,sans-serif; }
+  .bar-value { font-size: 11.5px; fill: var(--ink); font-weight:700; font-family:'Montserrat',Arial,sans-serif; }
+  .axis-label { font-size: 11px; fill: var(--ink-muted); font-family:'Montserrat',Arial,sans-serif; }
+  .grid-line { stroke: var(--border-light); stroke-width: 1; }
+  .baseline-line { stroke: var(--border-light-2); stroke-width: 1; }
+
+  /* ---------- Tooltip ---------- */
+  #tooltip {
+    position: fixed; pointer-events: none; z-index: 50;
+    background: var(--ink); color: #fff;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-size: 12.5px; padding: 10px 13px; border-radius: 12px;
+    line-height: 1.5; box-shadow: 0 12px 30px rgba(12,8,32,0.35);
+    opacity: 0; transform: translate(-50%, -100%); transition: opacity .08s ease;
+    max-width: 260px;
+  }
+  #tooltip.show { opacity: 1; }
+  #tooltip .t-title { font-weight: 800; margin-bottom: 3px; }
+
+  /* ---------- Quadrant ---------- */
+  .quadrant-grid { display:grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  @media (max-width: 980px) { .quadrant-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 560px) { .quadrant-grid { grid-template-columns: 1fr; } }
+  .quad-card {
+    background: #FFFFFF; border: 1px solid var(--border-light); border-top: 5px solid var(--q-color, var(--roxo));
+    border-radius: 20px; padding: 18px 18px 16px; box-shadow: var(--shadow-card);
+  }
+  .quad-card .quad-pill { margin-bottom: 10px; background: var(--q-color, var(--roxo)); }
+  .quad-card .count { font-size: 26px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 8px; color: var(--ink); }
+  .quad-card ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-body); line-height:1.7; }
+  .quad-card p.desc { font-size: 12.5px; color: var(--ink-muted); margin: 0 0 10px; line-height:1.5; }
+
+  /* ---------- Flowchart ---------- */
+  .flow-tier { position: relative; padding-left: 50px; padding-bottom: 8px; }
+  .flow-tier::before {
+    content:''; position:absolute; left: 19px; top: 38px; bottom: 10px; width: 2px;
+    background: var(--tier-color, var(--dark-card-border)); opacity: 0.5;
+  }
+  .flow-tier-header { display:flex; align-items:center; gap:12px; margin-bottom: 16px; }
+  .flow-tier-badge {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--tier-color);
+    color: var(--tier-ink, #fff); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px;
+    position:absolute; left: 0; top: 0; box-shadow: 0 8px 20px 0 rgba(0,0,0,0.35);
+  }
+  .flow-tier-title { font-weight:800; font-size: 16px; letter-spacing: -0.3px; }
+  .flow-tier-desc { font-size: 12.5px; color: var(--dark-text-muted); margin: 2px 0 0; max-width: 620px; line-height:1.5; }
+  .flow-nodes { display:flex; flex-wrap: wrap; gap: 12px; margin-bottom: 22px; }
+  .flow-node {
+    position:relative; background: var(--dark-card-bg); border: 1px solid var(--dark-card-border); border-radius: 16px;
+    padding: 12px 14px; min-width: 176px; flex: 1 1 196px; max-width: 240px;
+    border-left: 3px solid var(--tier-color, var(--roxo));
+  }
+  .flow-node .rank {
+    position:absolute; top:-10px; left:-10px; width:24px; height:24px; border-radius:50%;
+    background: var(--tier-color); color: var(--tier-ink, #fff); font-size:11px; font-weight:800;
+    display:flex; align-items:center; justify-content:center;
+    border: 2px solid #17102c;
+  }
+  .flow-node .name { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; line-height:1.35; min-height: 34px; color: var(--dark-text); }
+  .flow-node .stats { font-size: 11.5px; color: var(--dark-text-muted); display:flex; justify-content: space-between; gap:8px; }
+  .flow-arrow-down {
+    display:flex; align-items:center; justify-content:center; gap:8px; margin: 0 0 20px 50px;
+    color: var(--dark-text-muted); font-size: 12px; font-weight:600;
+  }
+
+  /* ---------- Table ---------- */
+  table.data-table { width:100%; border-collapse: collapse; font-size: 13px; }
+  table.data-table th, table.data-table td { text-align:left; padding: 11px 12px; border-bottom: 1px solid var(--border-light); }
+  table.data-table th { color: var(--ink-muted); font-weight:700; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.3px; white-space:nowrap; }
+  table.data-table td.num { text-align:right; font-variant-numeric: tabular-nums; }
+  table.data-table tr:hover td { background: var(--lilac-bg); }
+  .tier-chip {
+    display:inline-block; font-size: 10.5px; font-weight:800; padding: 3px 10px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.3px;
+  }
+  .table-card { background:#fff; border:1px solid var(--border-light); border-radius: 20px; padding: 10px 18px; box-shadow: var(--shadow-card); overflow-x:auto; }
+
+  footer.foot {
+    padding: 40px 0 48px; color: var(--dark-text-muted); font-size: 12.5px; line-height:1.7;
+  }
+  footer.foot strong { color: var(--dark-text-body); }
+</style>
+</head>
+<body>
+
+  <!-- ============ HERO (dark) ============ -->
+  <section class="band dark">
+    <div class="wrap">
+      <div class="hero-top">
+        <div>
+          <span class="pill" style="background:var(--grad-primary)">Clarify · Financeiro</span>
+          <h1 class="hero-title" style="margin-top:18px;">Catálogo de <span class="grad">Cursos</span></h1>
+          <p class="hero-sub">Custos, ticket médio e ordem de sugestão comercial dos cursos, com base na planilha <strong>lista_cursos.csv</strong>. Preparado para a equipe financeira.</p>
+          <div class="hero-meta" id="meta-line"></div>
+        </div>
+      </div>
+      <div class="kpi-grid" id="kpi-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ INSIGHTS (white) ============ -->
+  <section class="band white" id="sec-insights">
+    <div class="wrap">
+      <div class="eyebrow">Leitura dos dados</div>
+      <h2 class="section-title">Insights financeiros</h2>
+      <p class="section-sub">Leituras diretas dos dados de preço e demanda, com a justificativa por trás de cada uma.</p>
+      <div class="insight-grid" id="insight-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ CHARTS (lilac) ============ -->
+  <section class="band lilac" id="sec-charts">
+    <div class="wrap">
+      <div class="eyebrow">Custos e valores médios</div>
+      <h2 class="section-title">Preço e demanda por curso</h2>
+      <p class="section-sub">Comparação de preço e de demanda entre cursos, e relação entre as duas variáveis.</p>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h3>Valor por curso</h3>
+          <p class="caption">Ordenado do mais caro para o mais barato. Ticket médio: <span id="cap-ticket-medio"></span>.</p>
+          <svg id="chart-valor"></svg>
+        </div>
+        <div class="chart-card">
+          <h3>Alunos matriculados por curso</h3>
+          <p class="caption">Ordenado do mais procurado para o menos procurado (proxy de demanda).</p>
+          <svg id="chart-alunos"></svg>
+        </div>
+        <div class="chart-card">
+          <h3>Preço x Demanda</h3>
+          <p class="caption">Cada ponto é um curso. Linhas marcam a média de valor e de alunos — dividem o catálogo em 4 quadrantes estratégicos.</p>
+          <svg id="chart-scatter"></svg>
+        </div>
+        <div class="chart-card">
+          <h3>Top 5 — receita potencial</h3>
+          <p class="caption">Valor do curso × alunos matriculados. Mostra onde o catálogo concentra faturamento.</p>
+          <svg id="chart-top5"></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUADRANT (white) ============ -->
+  <section class="band white" id="sec-quadrant">
+    <div class="wrap">
+      <div class="eyebrow">Matriz estratégica</div>
+      <h2 class="section-title">Matriz valor x demanda</h2>
+      <p class="section-sub">Cursos agrupados por posição acima/abaixo da média de valor (R$) e de alunos matriculados — útil para decidir onde ajustar preço, reforçar divulgação ou revisar o curso.</p>
+      <div class="quadrant-grid" id="quadrant-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============ FLOW (dark) ============ -->
+  <section class="band dark" id="sec-flow">
+    <div class="wrap">
+      <div class="eyebrow">Abordagem comercial</div>
+      <h2 class="section-title">Fluxograma — ordem de sugestão dos cursos</h2>
+      <p class="section-sub">Sequência recomendada para apresentar os cursos ao cliente, do 1º ao 20º, com base no número de alunos matriculados (prova social). Segue a lógica já usada pela equipe comercial: abrir a conversa pelos cursos com mais matrículas, antes de falar em preço.</p>
+      <div id="flow-wrap"></div>
+    </div>
+  </section>
+
+  <!-- ============ TABLE (white) ============ -->
+  <section class="band white" id="sec-table">
+    <div class="wrap">
+      <div class="eyebrow">Dados completos</div>
+      <h2 class="section-title">Tabela completa</h2>
+      <p class="section-sub">Todos os cursos, com valor, alunos matriculados, receita potencial e segmento — visão alternativa aos gráficos acima.</p>
+      <div class="table-card">
+        <table class="data-table" id="data-table"></table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER (dark) ============ -->
+  <footer class="foot" style="background:#0C0820;">
+    <div class="wrap">
+      <div id="footer-note" style="margin-bottom:6px;"></div>
+      Fonte: lista_cursos.csv (20 cursos). <strong>Receita potencial</strong> = valor do curso × alunos já matriculados; não inclui novas vendas projetadas.
+      Os dados não possuem data de matrícula nem região — por isso este dashboard não cobre sazonalidade ou regionalidade; para essas análises é necessário complementar a planilha com essas colunas.
+    </div>
+  </footer>
+
+<div id="tooltip"></div>
+
+<script>
+(function(){
+
+  // ---------------------------------------------------------------------
+  // 0. Paleta Clarify (validada com o validador de contraste/CVD da skill dataviz)
+  // ---------------------------------------------------------------------
+  const C = {
+    roxo:'#7C3AED', rosa:'#EC4899', rosaDark:'#DB2777', ambar:'#F59E0B', ambarDark:'#D97706',
+    teal:'#0D9488', indigo:'#4F46E5', ciano:'#0891B2', alerta:'#EA580C', ink:'#0C0820'
+  };
+  function textOn(hex){
+    // luminância relativa simplificada -> escolhe tinta branca ou escura por contraste
+    const c = hex.replace('#','');
+    const r = parseInt(c.substr(0,2),16)/255, g = parseInt(c.substr(2,2),16)/255, b = parseInt(c.substr(4,2),16)/255;
+    const lin = v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+    const L = 0.2126*lin(r) + 0.7152*lin(g) + 0.0722*lin(b);
+    return L > 0.42 ? C.ink : '#FFFFFF';
+  }
+
+  // ---------------------------------------------------------------------
+  // 1. Dados (fonte: lista_cursos.csv)
+  // ---------------------------------------------------------------------
+  const cursos = [
+    {curso:"Python para Iniciantes", valor:675.48, alunos:12},
+    {curso:"Excel Avançado", valor:767.40, alunos:40},
+    {curso:"Power BI na Prática", valor:300.89, alunos:22},
+    {curso:"Desenvolvimento Web com HTML e CSS", valor:709.03, alunos:78},
+    {curso:"JavaScript Moderno", valor:178.24, alunos:63},
+    {curso:"Banco de Dados com SQL", valor:128.60, alunos:20},
+    {curso:"Introdução à Ciência de Dados", valor:296.77, alunos:73},
+    {curso:"Machine Learning Aplicado", valor:641.82, alunos:80},
+    {curso:"Redes de Computadores", valor:278.95, alunos:92},
+    {curso:"Segurança da Informação", valor:731.19, alunos:62},
+    {curso:"Desenvolvimento Mobile com Flutter", valor:298.40, alunos:84},
+    {curso:"React.js do Zero ao Avançado", valor:350.37, alunos:9},
+    {curso:"Java para Web", valor:782.93, alunos:29},
+    {curso:"Administração de Servidores Linux", valor:728.33, alunos:52},
+    {curso:"Cloud Computing com AWS", valor:350.08, alunos:36},
+    {curso:"DevOps na Prática", valor:961.49, alunos:52},
+    {curso:"Programação em C#", valor:191.99, alunos:57},
+    {curso:"Design de UX/UI", valor:187.04, alunos:53},
+    {curso:"Automação de Processos com RPA", valor:643.35, alunos:14},
+    {curso:"Introdução à Inteligência Artificial", valor:756.76, alunos:77},
+  ].map(d => ({...d, receita: d.valor * d.alunos}));
+
+  const fmtBRL = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+  const fmtInt = v => v.toLocaleString('pt-BR');
+  const fmtBRL0 = v => v.toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+
+  // ---------------------------------------------------------------------
+  // 2. Estatísticas
+  // ---------------------------------------------------------------------
+  const n = cursos.length;
+  const sum = arr => arr.reduce((a,b)=>a+b,0);
+  const valores = cursos.map(c=>c.valor);
+  const alunosArr = cursos.map(c=>c.alunos);
+  const receitas = cursos.map(c=>c.receita);
+
+  const ticketMedio = sum(valores)/n;
+  const sortedValores = [...valores].sort((a,b)=>a-b);
+  const mediana = n % 2 === 0
+    ? (sortedValores[n/2-1] + sortedValores[n/2]) / 2
+    : sortedValores[(n-1)/2];
+  const variancia = sum(valores.map(v => (v-ticketMedio)**2)) / n;
+  const desvio = Math.sqrt(variancia);
+  const totalAlunos = sum(alunosArr);
+  const mediaAlunos = totalAlunos / n;
+  const receitaTotal = sum(receitas);
+
+  const cursoMaisCaro = [...cursos].sort((a,b)=>b.valor-a.valor)[0];
+  const cursoMaisBarato = [...cursos].sort((a,b)=>a.valor-b.valor)[0];
+  const cursoMaisProcurado = [...cursos].sort((a,b)=>b.alunos-a.alunos)[0];
+  const cursoMenosProcurado = [...cursos].sort((a,b)=>a.alunos-b.alunos)[0];
+
+  function pearson(xs, ys){
+    const mx = sum(xs)/xs.length, my = sum(ys)/ys.length;
+    const cov = sum(xs.map((x,i)=>(x-mx)*(ys[i]-my)));
+    const sx = Math.sqrt(sum(xs.map(x=>(x-mx)**2)));
+    const sy = Math.sqrt(sum(ys.map(y=>(y-my)**2)));
+    return cov/(sx*sy);
+  }
+  const corr = pearson(valores, alunosArr);
+
+  const top5Receita = [...cursos].sort((a,b)=>b.receita-a.receita).slice(0,5);
+  const top5Sum = sum(top5Receita.map(c=>c.receita));
+  const top5Pct = (top5Sum/receitaTotal)*100;
+
+  const qEstrela   = cursos.filter(c => c.valor > ticketMedio && c.alunos > mediaAlunos);
+  const qCaroBaixo  = cursos.filter(c => c.valor > ticketMedio && c.alunos <= mediaAlunos);
+  const qBaratoAlto = cursos.filter(c => c.valor <= ticketMedio && c.alunos > mediaAlunos);
+  const qRevisao    = cursos.filter(c => c.valor <= ticketMedio && c.alunos <= mediaAlunos);
+
+  // ---------------------------------------------------------------------
+  // 3. Meta / header
+  // ---------------------------------------------------------------------
+  document.getElementById('meta-line').textContent =
+    `${n} cursos no catálogo · ${fmtInt(totalAlunos)} alunos matriculados no total · gerado em 17/08/2026`;
+  document.getElementById('footer-note').textContent =
+    `Dashboard gerado automaticamente a partir da planilha de cursos.`;
+
+  // ---------------------------------------------------------------------
+  // 4. KPI tiles (ícones simples em SVG, chip com gradiente Clarify)
+  // ---------------------------------------------------------------------
+  const ICONS = {
+    catalogo: '<path d="M4 4h16v16H4z" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M4 9h16" stroke="#fff" stroke-width="1.6"/>',
+    moeda: '<circle cx="12" cy="12" r="8" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M12 8v8M9.5 10a2.5 2 0 0 1 2.5-1.6c1.4 0 2.5.7 2.5 1.6s-1.1 1.4-2.5 1.6c-1.4.2-2.5.8-2.5 1.8 0 1 1.1 1.6 2.5 1.6a2.7 2 0 0 0 2.5-1.4" fill="none" stroke="#fff" stroke-width="1.3"/>',
+    dispersao: '<path d="M4 20V4M4 20h16" stroke="#fff" stroke-width="1.6" fill="none"/><circle cx="8" cy="15" r="1.4" fill="#fff"/><circle cx="12" cy="9" r="1.4" fill="#fff"/><circle cx="16" cy="13" r="1.4" fill="#fff"/><circle cx="19" cy="7" r="1.4" fill="#fff"/>',
+    receita: '<path d="M4 17l5-6 4 3 7-9" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 5h5v5" stroke="#fff" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    alunos: '<circle cx="9" cy="8" r="3" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#fff" stroke-width="1.6"/><circle cx="17" cy="9" r="2.4" fill="none" stroke="#fff" stroke-width="1.4"/><path d="M15.5 20c.2-2.6 1.7-4.6 3.8-5.4" fill="none" stroke="#fff" stroke-width="1.4"/>',
+    caro: '<path d="M12 3l2.5 5.5L20 9l-4.3 3.8L17 19l-5-3-5 3 1.3-6.2L4 9l5.5-.5z" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>',
+    barato: '<path d="M4 12l6 6L20 6" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+    fogo: '<path d="M12 3c1 3-3 4-3 7a3 3 0 0 0 6 0c1.3 1 2 2.6 2 4.2A5.2 5.2 0 0 1 12 19a5.2 5.2 0 0 1-5-5.4C7 9 12 8 12 3z" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>',
+  };
+  const kpis = [
+    { icon:'catalogo', label: 'Cursos no catálogo', value: fmtInt(n), detail: '' },
+    { icon:'moeda', label: 'Ticket médio', value: fmtBRL(ticketMedio), detail: `Mediana: ${fmtBRL(mediana)}` },
+    { icon:'dispersao', label: 'Dispersão de preço', value: fmtBRL(desvio), detail: `Desvio padrão · ${(desvio/ticketMedio*100).toFixed(0)}% da média` },
+    { icon:'receita', label: 'Receita potencial total', value: fmtBRL0(receitaTotal), detail: 'Valor × alunos matriculados' },
+    { icon:'alunos', label: 'Alunos matriculados', value: fmtInt(totalAlunos), detail: `${(mediaAlunos).toFixed(0)} em média por curso` },
+    { icon:'caro', label: 'Curso mais caro', value: cursoMaisCaro.curso, detail: fmtBRL(cursoMaisCaro.valor) },
+    { icon:'barato', label: 'Curso mais barato', value: cursoMaisBarato.curso, detail: fmtBRL(cursoMaisBarato.valor) },
+    { icon:'fogo', label: 'Curso mais procurado', value: cursoMaisProcurado.curso, detail: `${fmtInt(cursoMaisProcurado.alunos)} alunos` },
+  ];
+  document.getElementById('kpi-grid').innerHTML = kpis.map(k => `
+    <div class="kpi-tile">
+      <div class="kpi-icon"><svg viewBox="0 0 24 24">${ICONS[k.icon]}</svg></div>
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="detail">${k.detail}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('cap-ticket-medio').textContent = fmtBRL(ticketMedio);
+
+  // ---------------------------------------------------------------------
+  // 5. Insight cards
+  // ---------------------------------------------------------------------
+  const insights = [
+    {
+      n:'1',
+      h: 'Preço tem grande dispersão, mas distribuição equilibrada',
+      p: `O ticket médio do catálogo é <strong>${fmtBRL(ticketMedio)}</strong>, praticamente igual à mediana (<strong>${fmtBRL(mediana)}</strong>). Isso indica que a média não está distorcida por poucos cursos muito caros ou muito baratos. Ainda assim, o desvio padrão de <strong>${fmtBRL(desvio)}</strong> (${(desvio/ticketMedio*100).toFixed(0)}% da média) mostra um catálogo com faixas de preço bem largas, do curso mais barato (${fmtBRL(cursoMaisBarato.valor)}) ao mais caro (${fmtBRL(cursoMaisCaro.valor)}).`
+    },
+    {
+      n:'2',
+      h: 'Receita potencial concentrada em poucos cursos',
+      p: `A receita potencial do catálogo (valor × alunos já matriculados) soma <strong>${fmtBRL0(receitaTotal)}</strong>. Os 5 cursos de maior receita — ${top5Receita.map(c=>c.curso).join(', ')} — respondem sozinhos por <strong>${top5Pct.toFixed(0)}%</strong> desse total, o que indica concentração de faturamento e reforça a importância de manter esses cursos em destaque.`
+    },
+    {
+      n:'3',
+      h: 'Preço não explica a demanda',
+      p: `A correlação entre valor do curso e número de alunos matriculados é de <strong>r = ${corr.toFixed(2)}</strong>, ou seja, praticamente nula. Preço alto não afasta aluno e preço baixo não garante procura — o exemplo mais claro é o <strong>${cursoMaisCaro.curso}</strong>, o curso mais caro do catálogo (${fmtBRL(cursoMaisCaro.valor)}), que ainda assim tem ${fmtInt(cursoMaisCaro.alunos)} alunos matriculados. Isso sustenta a abordagem comercial já usada pela equipe de vendas: liderar com prova social (nº de alunos), não com desconto.`
+    },
+    {
+      n:'4',
+      h: 'Baixa demanda não é sempre um problema de preço',
+      p: `<strong>${cursoMenosProcurado.curso}</strong> tem apenas ${fmtInt(cursoMenosProcurado.alunos)} alunos matriculados mesmo com preço mediano (${fmtBRL(cursoMenosProcurado.valor)}), e <strong>${cursoMaisBarato.curso}</strong> tem o menor preço do catálogo (${fmtBRL(cursoMaisBarato.valor)}) e ainda assim só ${fmtInt(cursoMaisBarato.alunos)} alunos. Para esses casos, o ajuste provável não é baixar preço — é revisar divulgação, posicionamento ou o próprio conteúdo do curso.`
+    },
+    {
+      n:'5',
+      h: `Cursos "estrela": valor e demanda acima da média`,
+      p: `<strong>${qEstrela.length} cursos</strong> têm valor e número de alunos acima da média do catálogo ao mesmo tempo — a combinação mais saudável para receita, porque não depende de desconto para vender. São eles: ${qEstrela.map(c=>c.curso).join(', ')}.`
+    },
+    {
+      n:'6',
+      h: 'Onde vale reavaliar preço ou reforçar divulgação',
+      p: `<strong>${qCaroBaixo.length} cursos</strong> têm preço acima da média mas demanda abaixo da média (candidatos a reforço de marketing ou redução de preço), e <strong>${qBaratoAlto.length} cursos</strong> têm preço abaixo da média com demanda acima da média — volume forte com possível espaço para reajuste de preço sem grande perda de procura, já que a correlação preço×demanda é praticamente nula.`
+    },
+  ];
+  document.getElementById('insight-grid').innerHTML = insights.map(i => `
+    <div class="insight-card"><div class="dot">${i.n}</div><h3>${i.h}</h3><p>${i.p}</p></div>
+  `).join('');
+
+  // ---------------------------------------------------------------------
+  // 6. Tooltip helper
+  // ---------------------------------------------------------------------
+  const tooltip = document.getElementById('tooltip');
+  function showTooltip(evt, html){
+    tooltip.innerHTML = html;
+    tooltip.classList.add('show');
+    moveTooltip(evt);
+  }
+  function moveTooltip(evt){
+    tooltip.style.left = evt.clientX + 'px';
+    tooltip.style.top = (evt.clientY - 12) + 'px';
+  }
+  function hideTooltip(){ tooltip.classList.remove('show'); }
+
+  function courseTooltipHtml(c){
+    return `<div class="t-title">${c.curso}</div>
+      Valor: ${fmtBRL(c.valor)}<br>
+      Alunos matriculados: ${fmtInt(c.alunos)}<br>
+      Receita potencial: ${fmtBRL0(c.receita)}`;
+  }
+
+  // ---------------------------------------------------------------------
+  // 7. Horizontal bar chart renderer (SVG)
+  // ---------------------------------------------------------------------
+  function renderBarChart(svgId, items, valueKey, formatter, barColor){
+    const svg = document.getElementById(svgId);
+    const barH = 16, gap = 10, rowH = barH + gap;
+    const leftW = 210, rightPad = 78, chartW = 380;
+    const totalW = leftW + chartW + rightPad;
+    const totalH = items.length * rowH + 8;
+    const maxVal = Math.max(...items.map(d=>d[valueKey]));
+
+    svg.setAttribute('viewBox', `0 0 ${totalW} ${totalH}`);
+    svg.innerHTML = '';
+
+    const ns = 'http://www.w3.org/2000/svg';
+    const baseline = document.createElementNS(ns,'line');
+    baseline.setAttribute('x1', leftW); baseline.setAttribute('x2', leftW);
+    baseline.setAttribute('y1', 0); baseline.setAttribute('y2', totalH);
+    baseline.setAttribute('class','baseline-line');
+    svg.appendChild(baseline);
+
+    items.forEach((d,i) => {
+      const y = i*rowH + 4;
+      const barLen = Math.max(2, (d[valueKey]/maxVal) * chartW);
+
+      const label = document.createElementNS(ns,'text');
+      label.setAttribute('x', leftW - 8);
+      label.setAttribute('y', y + barH/2 + 4);
+      label.setAttribute('text-anchor', 'end');
+      label.setAttribute('class','bar-label');
+      label.textContent = d.curso.length > 32 ? d.curso.slice(0,31)+'…' : d.curso;
+      svg.appendChild(label);
+
+      const rect = document.createElementNS(ns,'rect');
+      rect.setAttribute('x', leftW);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', barLen);
+      rect.setAttribute('height', barH);
+      rect.setAttribute('rx', 4);
+      rect.setAttribute('fill', barColor);
+      svg.appendChild(rect);
+
+      const val = document.createElementNS(ns,'text');
+      val.setAttribute('x', leftW + barLen + 6);
+      val.setAttribute('y', y + barH/2 + 4);
+      val.setAttribute('class','bar-value');
+      val.textContent = formatter(d[valueKey]);
+      svg.appendChild(val);
+
+      const hit = document.createElementNS(ns,'rect');
+      hit.setAttribute('x', 0);
+      hit.setAttribute('y', y - 3);
+      hit.setAttribute('width', totalW);
+      hit.setAttribute('height', barH + 6);
+      hit.setAttribute('fill', 'transparent');
+      hit.addEventListener('mouseenter', (e) => { rect.setAttribute('opacity','0.75'); showTooltip(e, courseTooltipHtml(d)); });
+      hit.addEventListener('mousemove', moveTooltip);
+      hit.addEventListener('mouseleave', () => { rect.setAttribute('opacity','1'); hideTooltip(); });
+      svg.appendChild(hit);
+    });
+  }
+
+  const cursosPorValor = [...cursos].sort((a,b)=>b.valor-a.valor);
+  const cursosPorAlunos = [...cursos].sort((a,b)=>b.alunos-a.alunos);
+
+  // ---------------------------------------------------------------------
+  // 8. Scatter chart (Preço x Demanda)
+  // ---------------------------------------------------------------------
+  function renderScatter(){
+    const svg = document.getElementById('chart-scatter');
+    const ns = 'http://www.w3.org/2000/svg';
+    const W = 620, H = 420;
+    const padL = 56, padR = 20, padT = 16, padB = 46;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = '';
+
+    const xMax = 1000, yMax = 100;
+    const xScale = v => padL + (v/xMax) * (W - padL - padR);
+    const yScale = v => (H - padB) - (v/yMax) * (H - padB - padT);
+
+    const xTicks = [0,200,400,600,800,1000];
+    const yTicks = [0,20,40,60,80,100];
+
+    xTicks.forEach(t => {
+      const gl = document.createElementNS(ns,'line');
+      gl.setAttribute('x1', xScale(t)); gl.setAttribute('x2', xScale(t));
+      gl.setAttribute('y1', padT); gl.setAttribute('y2', H-padB);
+      gl.setAttribute('class','grid-line');
+      svg.appendChild(gl);
+      const lbl = document.createElementNS(ns,'text');
+      lbl.setAttribute('x', xScale(t)); lbl.setAttribute('y', H-padB+16);
+      lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('class','axis-label');
+      lbl.textContent = 'R$'+t;
+      svg.appendChild(lbl);
+    });
+    yTicks.forEach(t => {
+      const gl = document.createElementNS(ns,'line');
+      gl.setAttribute('x1', padL); gl.setAttribute('x2', W-padR);
+      gl.setAttribute('y1', yScale(t)); gl.setAttribute('y2', yScale(t));
+      gl.setAttribute('class','grid-line');
+      svg.appendChild(gl);
+      const lbl = document.createElementNS(ns,'text');
+      lbl.setAttribute('x', padL-8); lbl.setAttribute('y', yScale(t)+4);
+      lbl.setAttribute('text-anchor','end'); lbl.setAttribute('class','axis-label');
+      lbl.textContent = t;
+      svg.appendChild(lbl);
+    });
+
+    const xTitle = document.createElementNS(ns,'text');
+    xTitle.setAttribute('x', (W+padL-padR)/2); xTitle.setAttribute('y', H-6);
+    xTitle.setAttribute('text-anchor','middle'); xTitle.setAttribute('class','axis-label');
+    xTitle.textContent = 'Valor do curso (R$)';
+    svg.appendChild(xTitle);
+
+    const yTitle = document.createElementNS(ns,'text');
+    yTitle.setAttribute('x', -H/2); yTitle.setAttribute('y', 14);
+    yTitle.setAttribute('text-anchor','middle'); yTitle.setAttribute('class','axis-label');
+    yTitle.setAttribute('transform','rotate(-90)');
+    yTitle.textContent = 'Alunos matriculados';
+    svg.appendChild(yTitle);
+
+    const vLine = document.createElementNS(ns,'line');
+    vLine.setAttribute('x1', xScale(ticketMedio)); vLine.setAttribute('x2', xScale(ticketMedio));
+    vLine.setAttribute('y1', padT); vLine.setAttribute('y2', H-padB);
+    vLine.setAttribute('stroke', '#D5DEE2'); vLine.setAttribute('stroke-width','1.5');
+    svg.appendChild(vLine);
+
+    const hLine = document.createElementNS(ns,'line');
+    hLine.setAttribute('x1', padL); hLine.setAttribute('x2', W-padR);
+    hLine.setAttribute('y1', yScale(mediaAlunos)); hLine.setAttribute('y2', yScale(mediaAlunos));
+    hLine.setAttribute('stroke', '#D5DEE2'); hLine.setAttribute('stroke-width','1.5');
+    svg.appendChild(hLine);
+
+    const refLabel = document.createElementNS(ns,'text');
+    refLabel.setAttribute('x', xScale(ticketMedio)+4); refLabel.setAttribute('y', padT+10);
+    refLabel.setAttribute('class','axis-label');
+    refLabel.textContent = `média valor (${fmtBRL0(ticketMedio)})`;
+    svg.appendChild(refLabel);
+
+    const refLabel2 = document.createElementNS(ns,'text');
+    refLabel2.setAttribute('x', padL+4); refLabel2.setAttribute('y', yScale(mediaAlunos)-6);
+    refLabel2.setAttribute('text-anchor','start'); refLabel2.setAttribute('class','axis-label');
+    refLabel2.textContent = `média alunos (${mediaAlunos.toFixed(0)})`;
+    svg.appendChild(refLabel2);
+
+    const labelSet = new Set([cursoMaisCaro.curso, cursoMaisBarato.curso, cursoMaisProcurado.curso, cursoMenosProcurado.curso]);
+
+    cursos.forEach(d => {
+      const cx = xScale(d.valor), cy = yScale(d.alunos);
+      const dot = document.createElementNS(ns,'circle');
+      dot.setAttribute('cx', cx); dot.setAttribute('cy', cy); dot.setAttribute('r', 6);
+      dot.setAttribute('fill', C.roxo);
+      dot.setAttribute('stroke', '#FFFFFF');
+      dot.setAttribute('stroke-width', 2);
+      dot.addEventListener('mouseenter', (e) => { dot.setAttribute('r','8'); showTooltip(e, courseTooltipHtml(d)); });
+      dot.addEventListener('mousemove', moveTooltip);
+      dot.addEventListener('mouseleave', () => { dot.setAttribute('r','6'); hideTooltip(); });
+      svg.appendChild(dot);
+
+      if (labelSet.has(d.curso)) {
+        const nearRight = cx > (W - padR - 130);
+        const t = document.createElementNS(ns,'text');
+        t.setAttribute('x', nearRight ? cx-9 : cx+9);
+        t.setAttribute('y', cy-9);
+        t.setAttribute('text-anchor', nearRight ? 'end' : 'start');
+        t.setAttribute('class','axis-label');
+        t.textContent = d.curso.length > 26 ? d.curso.slice(0,25)+'…' : d.curso;
+        svg.appendChild(t);
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // 9. Fluxograma — ordem de sugestão
+  // ---------------------------------------------------------------------
+  function renderFlow(){
+    const sorted = [...cursos].sort((a,b)=>b.alunos-a.alunos);
+    const tiers = [
+      { color: C.roxo, title:'Estágio 1 — Abrir a conversa',
+        desc:'Maior prova social: mais alunos já matriculados. Use esse número antes de falar em preço.',
+        items: sorted.filter(c=>c.alunos>=70) },
+      { color: C.ambarDark, title:'Estágio 2 — Manter o momentum',
+        desc:'Demanda intermediária: bons argumentos de venda, mas menos automáticos que o estágio 1.',
+        items: sorted.filter(c=>c.alunos>=30 && c.alunos<70) },
+      { color: C.teal, title:'Estágio 3 — Fechar com argumento extra',
+        desc:'Menor demanda: sugerir por último, com argumento adicional além do número de matrículas.',
+        items: sorted.filter(c=>c.alunos<30) },
+    ];
+
+    let rank = 1;
+    const wrap = document.getElementById('flow-wrap');
+    wrap.innerHTML = '';
+
+    tiers.forEach((tier, tIdx) => {
+      const tierInk = textOn(tier.color);
+      const tierDiv = document.createElement('div');
+      tierDiv.className = 'flow-tier';
+      tierDiv.style.setProperty('--tier-color', tier.color);
+      tierDiv.style.setProperty('--tier-ink', tierInk);
+
+      const header = document.createElement('div');
+      header.className = 'flow-tier-header';
+      header.innerHTML = `
+        <div class="flow-tier-badge" style="background:${tier.color}; color:${tierInk}">${tIdx+1}</div>
+        <div>
+          <div class="flow-tier-title">${tier.title}</div>
+          <p class="flow-tier-desc">${tier.desc}</p>
+        </div>`;
+      tierDiv.appendChild(header);
+
+      const nodesDiv = document.createElement('div');
+      nodesDiv.className = 'flow-nodes';
+      tier.items.forEach(c => {
+        const node = document.createElement('div');
+        node.className = 'flow-node';
+        node.style.setProperty('--tier-color', tier.color);
+        node.style.setProperty('--tier-ink', tierInk);
+        node.innerHTML = `
+          <div class="rank" style="background:${tier.color}; color:${tierInk}">${rank}</div>
+          <div class="name">${c.curso}</div>
+          <div class="stats"><span>${fmtInt(c.alunos)} alunos</span><span>${fmtBRL(c.valor)}</span></div>
+        `;
+        node.addEventListener('mouseenter', (e)=> showTooltip(e, courseTooltipHtml(c)));
+        node.addEventListener('mousemove', moveTooltip);
+        node.addEventListener('mouseleave', hideTooltip);
+        nodesDiv.appendChild(node);
+        rank++;
+      });
+      tierDiv.appendChild(nodesDiv);
+      wrap.appendChild(tierDiv);
+
+      if (tIdx < tiers.length-1) {
+        const arrow = document.createElement('div');
+        arrow.className = 'flow-arrow-down';
+        arrow.innerHTML = `<span>↓</span><span>em seguida</span>`;
+        wrap.appendChild(arrow);
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------
+  // 10. Tabela completa
+  // ---------------------------------------------------------------------
+  function tierOf(alunos){
+    if (alunos >= 70) return {label:'Estágio 1', color: C.roxo};
+    if (alunos >= 30) return {label:'Estágio 2', color: C.ambarDark};
+    return {label:'Estágio 3', color: C.teal};
+  }
+  function renderTable(){
+    const sorted = [...cursos].sort((a,b)=>b.alunos-a.alunos);
+    const rows = sorted.map((c,i) => {
+      const t = tierOf(c.alunos);
+      const ink = textOn(t.color);
+      return `<tr>
+        <td>${i+1}</td>
+        <td>${c.curso}</td>
+        <td class="num">${fmtBRL(c.valor)}</td>
+        <td class="num">${fmtInt(c.alunos)}</td>
+        <td class="num">${fmtBRL0(c.receita)}</td>
+        <td><span class="tier-chip" style="background:${t.color}; color:${ink}">${t.label}</span></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('data-table').innerHTML = `
+      <thead><tr>
+        <th>#</th><th>Curso</th><th>Valor</th><th>Alunos</th><th>Receita potencial</th><th>Segmento</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    `;
+  }
+
+  // ---------------------------------------------------------------------
+  // 11. Quadrantes
+  // ---------------------------------------------------------------------
+  function renderQuadrants(){
+    const quads = [
+      { title:'Estrela', color: C.roxo, desc:'Valor e demanda acima da média — melhor combinação para receita.', items:qEstrela },
+      { title:'Reavaliar preço', color: C.ambar, desc:'Valor acima da média, demanda abaixo — considerar reforço de divulgação ou ajuste de preço.', items:qCaroBaixo },
+      { title:'Alavanca de volume', color: C.teal, desc:'Valor abaixo da média, demanda acima — espaço para testar aumento de preço.', items:qBaratoAlto },
+      { title:'Candidato à revisão', color: C.alerta, desc:'Valor e demanda abaixo da média — revisar posicionamento ou descontinuar.', items:qRevisao },
+    ];
+    document.getElementById('quadrant-grid').innerHTML = quads.map(q => `
+      <div class="quad-card" style="--q-color:${q.color}">
+        <span class="pill quad-pill" style="color:${textOn(q.color)}">${q.title}</span>
+        <p class="desc">${q.desc}</p>
+        <div class="count">${q.items.length} curso${q.items.length===1?'':'s'}</div>
+        <ul>${q.items.map(c=>`<li>${c.curso}</li>`).join('')}</ul>
+      </div>
+    `).join('');
+  }
+
+  // ---------------------------------------------------------------------
+  // 12. Render inicial
+  // ---------------------------------------------------------------------
+  function draw(){
+    renderBarChart('chart-valor', cursosPorValor, 'valor', fmtBRL, C.roxo);
+    renderBarChart('chart-alunos', cursosPorAlunos, 'alunos', fmtInt, C.roxo);
+    renderBarChart('chart-top5', top5Receita, 'receita', fmtBRL0, C.rosa);
+    renderScatter();
+    renderFlow();
+    renderTable();
+    renderQuadrants();
+  }
+  draw();
+  window.addEventListener('resize', () => { renderScatter(); });
+
+})();
+</script>
+</body>
+</html>
