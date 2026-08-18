@@ -1,0 +1,190 @@
+/* ==========================================================================
+   layout.css — grid geral, header, sidebar, painéis, rodapé
+   ========================================================================== */
+
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  grid-template-rows: var(--header-h) 1fr;
+  grid-template-areas:
+    "header header"
+    "aside  main";
+  height: 100vh;
+}
+
+/* ---------------- Header ---------------- */
+.app-header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  z-index: 20;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.brand__mark {
+  width: 34px; height: 34px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff; font-size: 18px;
+  box-shadow: 0 6px 16px rgba(255,90,95,.32);
+}
+.brand__text { min-width: 0; }
+.brand__title {
+  font-size: 15px; font-weight: 700; letter-spacing: -.2px; color: var(--txt-strong);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.brand__sub { font-size: 11px; color: var(--faint); white-space: nowrap; }
+
+.header__spacer { flex: 1 1 auto; }
+
+.header__cities {
+  display: flex; align-items: center; gap: 6px;
+  max-width: 40vw; overflow-x: auto; padding: 4px 0;
+}
+
+.header__actions { display: flex; align-items: center; gap: 8px; flex: none; }
+
+/* ---------------- Sidebar (filtros) ---------------- */
+.app-aside {
+  grid-area: aside;
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 14px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 9px; }
+.filter-group__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+
+/* ---------------- Main ---------------- */
+.app-main {
+  grid-area: main;
+  overflow-y: auto;
+  padding: var(--gap);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  background:
+    radial-gradient(900px 420px at 82% -8%, rgba(0,166,153,.07), transparent 60%),
+    radial-gradient(760px 380px at 8% -6%, rgba(255,90,95,.07), transparent 60%);
+}
+
+/* Faixa de cards estatísticos */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+}
+
+/* Bloco de conteúdo */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* .app-main é um flex column com rolagem: sem isto os painéis encolhem
+     até a altura zero e o mapa some. */
+  flex: 0 0 auto;
+}
+.panel__head {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  flex: none;
+  flex-wrap: wrap;
+}
+.panel__head .spacer { flex: 1 1 auto; }
+.panel__body { padding: 14px; flex: 1 1 auto; min-height: 0; }
+.panel__body--flush { padding: 0; }
+
+/* Mapa */
+.map-panel { height: clamp(420px, 56vh, 720px); min-height: 420px; }
+.map-panel .panel__body { min-height: 0; }
+#map { width: 100%; height: 100%; min-height: 340px; background: var(--bg-soft); }
+
+/* Grade de gráficos */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: var(--gap);
+}
+.chart-box { position: relative; height: 260px; }
+.chart-box canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; }
+
+/* Comparação */
+.compare-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--gap);
+}
+@media (max-width: 1180px) {
+  .compare-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------- Rodapé ---------------- */
+.app-footer {
+  margin-top: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 13px;
+}
+.app-footer .spacer { flex: 1 1 auto; }
+.app-footer strong { color: var(--txt); }
+.footer__author { display: flex; align-items: center; gap: 10px; }
+.footer__avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex: none;
+  display: grid; place-items: center; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, var(--brand2), var(--brand2-dark));
+}
+.footer__links { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+/* ---------------- Responsivo ---------------- */
+@media (max-width: 1024px) {
+  body { overflow: auto; }
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "header"
+      "aside"
+      "main";
+    height: auto;
+    min-height: 100vh;
+  }
+  .app-aside {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    max-height: none;
+    overflow: visible;
+  }
+  .app-main { overflow: visible; }
+  .header__cities { max-width: none; }
+}
+
+@media (max-width: 640px) {
+  .app-header { flex-wrap: wrap; height: auto; padding: 10px 12px; gap: 8px; }
+  .app { grid-template-rows: auto auto 1fr; }
+  .brand__sub { display: none; }
+  .cards { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}

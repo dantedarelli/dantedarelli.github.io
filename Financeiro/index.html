@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selic × Inadimplência — Correlação e Previsibilidade</title>
+<style>
+  :root{
+    color-scheme: dark;
+    --page:#0d0d0d; --surface:#1a1a19; --surface-2:#20201f;
+    --line:#2c2c2a; --baseline:#383835;
+    --ink:#ffffff; --ink-2:#c3c2b7; --muted:#898781;
+    --series-selic:#3987e5; --series-selic-wash:rgba(57,135,229,.12);
+    --series-inad:#d95926; --series-inad-wash:rgba(217,89,38,.12);
+    --good:#0ca30c; --warning:#fab219; --critical:#e66767;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--page); color:var(--ink);
+    font:15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+    padding:28px 20px 60px;
+  }
+  .wrap{max-width:1180px; margin:0 auto}
+  header.top{margin-bottom:22px}
+  header.top h1{font-size:24px; margin:0 0 4px; letter-spacing:-.3px}
+  header.top p{margin:0; color:var(--muted); font-size:14px}
+
+  /* ---------- upload ---------- */
+  #uploadStage .cardBox{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:28px; margin-bottom:16px;
+  }
+  .drop{
+    border:1.5px dashed var(--baseline); border-radius:12px; padding:36px 20px;
+    text-align:center; color:var(--muted); cursor:pointer; transition:border-color .15s, background .15s;
+  }
+  .drop.hover, .drop:hover{border-color:var(--series-selic); background:var(--surface-2)}
+  .drop strong{color:var(--ink); display:block; margin-bottom:6px; font-size:15px}
+  .drop input{display:none}
+  #fileStatus{margin-top:16px; font-size:13.5px}
+  .fileRow{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:10px 14px; border:1px solid var(--line); border-radius:10px; margin-top:8px;
+    background:var(--surface-2);
+  }
+  .fileRow .name{color:var(--ink-2)}
+  .fileRow select{
+    background:var(--surface); color:var(--ink); border:1px solid var(--baseline);
+    border-radius:8px; padding:5px 8px; font-size:13px;
+  }
+  #loadErr{color:var(--critical); font-size:13.5px; margin-top:10px; display:none}
+  #continueBtn{
+    margin-top:18px; background:var(--series-selic); color:#fff; border:none;
+    padding:11px 22px; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer;
+    opacity:.4; pointer-events:none; transition:opacity .15s;
+  }
+  #continueBtn.ready{opacity:1; pointer-events:auto}
+  #continueBtn:hover.ready{filter:brightness(1.1)}
+
+  /* ---------- dashboard ---------- */
+  #dashStage{display:none}
+  .filterRow{
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-bottom:18px;
+  }
+  .filterRow .grp{display:flex; align-items:center; gap:6px}
+  .filterRow label{font-size:12.5px; color:var(--muted)}
+  .presetBtn{
+    background:var(--surface-2); color:var(--ink-2); border:1px solid var(--baseline);
+    border-radius:8px; padding:6px 12px; font-size:13px; cursor:pointer;
+  }
+  .presetBtn.active{background:var(--series-selic); color:#fff; border-color:var(--series-selic)}
+  input[type="month"]{
+    background:var(--surface-2); color:var(--ink); border:1px solid var(--baseline);
+    border-radius:8px; padding:5px 8px; font-size:13px; color-scheme:dark;
+  }
+  .spacer{flex:1}
+  #dataSourceNote{font-size:12px; color:var(--muted)}
+  #resetBtn{background:none; border:1px solid var(--baseline); color:var(--muted); border-radius:8px; padding:6px 10px; font-size:12.5px; cursor:pointer}
+
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px}
+  .kpi{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px;
+  }
+  .kpi .label{font-size:12.5px; color:var(--muted); margin-bottom:8px}
+  .kpi .value{font-size:26px; font-weight:600; line-height:1.1}
+  .kpi .sub{font-size:12px; color:var(--muted); margin-top:6px}
+  .kpi .value.up{color:var(--critical)}
+  .kpi .value.down{color:var(--good)}
+  .dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px}
+
+  .panel{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px 22px; margin-bottom:18px;
+  }
+  .panel h2{font-size:16px; margin:0 0 2px}
+  .panel .desc{font-size:13px; color:var(--muted); margin:0 0 14px}
+  .panel .ctrlRow{display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap}
+  .panel .ctrlRow label{font-size:12.5px; color:var(--muted)}
+  .panel .ctrlRow input[type="range"]{width:160px}
+  .panel .ctrlRow .val{font-size:13px; color:var(--ink-2); min-width:56px; display:inline-block}
+  .statLine{display:flex; gap:22px; flex-wrap:wrap; margin-bottom:12px}
+  .statLine .s{font-size:13px; color:var(--ink-2)}
+  .statLine .s b{color:var(--ink); font-size:15px}
+  .chartBox{position:relative; height:280px}
+  details.tv{margin-top:12px}
+  details.tv summary{cursor:pointer; color:var(--muted); font-size:12.5px; user-select:none}
+  details.tv table{width:100%; border-collapse:collapse; margin-top:10px; font-size:12.5px}
+  details.tv th, details.tv td{padding:6px 8px; border-bottom:1px solid var(--line); text-align:right; font-variant-numeric:tabular-nums}
+  details.tv th:first-child, details.tv td:first-child{text-align:left}
+  details.tv .scroll{max-height:220px; overflow:auto; border:1px solid var(--line); border-radius:8px}
+  .legend{display:flex; gap:16px; margin-bottom:10px; font-size:12.5px; color:var(--ink-2)}
+  .legend .lk{display:inline-flex; align-items:center; gap:6px}
+  .legend .line{width:14px; height:2px; border-radius:1px; display:inline-block}
+  .caveat{font-size:12px; color:var(--muted); margin-top:10px}
+
+  footer{margin-top:26px; padding-top:18px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); text-align:center}
+  footer a{color:var(--series-selic)}
+
+  @media (max-width:900px){ .kpis{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:600px){ .kpis{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Selic × Inadimplência</h1>
+    <p>Correlação entre a taxa Selic e a inadimplência da carteira de crédito de pessoas físicas, com regressão linear para previsibilidade.</p>
+  </header>
+
+  <!-- ============ UPLOAD ============ -->
+  <section id="uploadStage">
+    <div class="cardBox">
+      <div class="drop" id="dropZone">
+        <strong>Arraste os dois arquivos CSV aqui, ou clique para selecionar</strong>
+        <span>taxa_selic.csv (série diária) e inadimplencia.csv (série mensal)</span>
+        <input type="file" id="fileInput" accept=".csv" multiple>
+      </div>
+      <div id="fileStatus"></div>
+      <div id="loadErr"></div>
+      <button id="continueBtn">Carregar dashboard</button>
+    </div>
+  </section>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section id="dashStage">
+
+    <div class="filterRow" id="filterRow">
+      <div class="grp">
+        <label>Período:</label>
+        <button class="presetBtn" data-preset="12">Últimos 12m</button>
+        <button class="presetBtn" data-preset="24">Últimos 24m</button>
+        <button class="presetBtn" data-preset="60">Últimos 5 anos</button>
+        <button class="presetBtn" data-preset="all">Tudo</button>
+      </div>
+      <div class="grp">
+        <label>De</label>
+        <input type="month" id="startMonth">
+        <label>até</label>
+        <input type="month" id="endMonth">
+      </div>
+      <div class="spacer"></div>
+      <span id="dataSourceNote"></span>
+      <button id="resetBtn">Carregar outros arquivos</button>
+    </div>
+
+    <div class="kpis" id="kpiRow"></div>
+
+    <!-- Panel 1: indexed comparison -->
+    <div class="panel">
+      <h2>Evolução comparada (base 100)</h2>
+      <p class="desc">Cada série indexada a 100 no primeiro mês do período filtrado, para comparar a direção do movimento numa única escala — a Selic mensal acumulada é uma ordem de grandeza menor que a inadimplência, então valores absolutos não são comparáveis diretamente num mesmo eixo.</p>
+      <div class="legend" id="legend1"></div>
+      <div class="chartBox"><canvas id="chartIndex"></canvas></div>
+      <details class="tv"><summary>Ver tabela</summary><div class="scroll"><table id="tableIndex"></table></div></details>
+    </div>
+
+    <!-- Panel 2: correlation scatter -->
+    <div class="panel">
+      <h2>Correlação — Inadimplência vs. Selic</h2>
+      <p class="desc">Cada ponto é um mês do período filtrado: Selic acumulada no mês (defasada em N meses) no eixo X, inadimplência do mês no eixo Y. A reta é o ajuste linear (mínimos quadrados).</p>
+      <div class="ctrlRow">
+        <label for="lagRange">Defasagem da Selic (meses antes da inadimplência):</label>
+        <input type="range" id="lagRange" min="0" max="12" value="0" step="1">
+        <span class="val" id="lagVal">0 meses</span>
+      </div>
+      <div class="statLine" id="corrStats"></div>
+      <div class="chartBox"><canvas id="chartScatter"></canvas></div>
+      <details class="tv"><summary>Ver tabela</summary><div class="scroll"><table id="tableScatter"></table></div></details>
+    </div>
+
+    <!-- Panel 3: trend & forecast -->
+    <div class="panel">
+      <h2>Tendência e previsão da inadimplência</h2>
+      <p class="desc">Regressão linear da inadimplência ao longo do tempo (mês a mês), estendida para os próximos meses. Extrapolação linear simples — não considera sazonalidade, choques de crédito ou mudanças de política monetária.</p>
+      <div class="ctrlRow">
+        <label for="horizonRange">Horizonte de previsão:</label>
+        <input type="range" id="horizonRange" min="1" max="24" value="6" step="1">
+        <span class="val" id="horizonVal">6 meses</span>
+      </div>
+      <div class="statLine" id="trendStats"></div>
+      <div class="caveat" id="trendCaveat" style="display:none"></div>
+      <div class="legend" id="legend3"></div>
+      <div class="chartBox"><canvas id="chartTrend"></canvas></div>
+      <details class="tv"><summary>Ver tabela de previsão</summary><div class="scroll"><table id="tableForecast"></table></div></details>
+    </div>
+
+  </section>
+
+  <footer>
+    Autor: <strong>Dante Darelli</strong> · <a href="mailto:dante.darelli@hotmail.com">dante.darelli@hotmail.com</a>
+    · Fonte dos dados: API SGS do Banco Central (séries 11 e 21082)
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function(){
+  'use strict';
+
+  /* ============================================================
+     1. CSV parsing & role detection — nada fixo no código além
+        dos nomes de coluna esperados ("data" e "valor").
+     ============================================================ */
+
+  function parseBRDate(str){
+    var m = String(str||'').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if(!m) return null;
+    var d = +m[1], mo = +m[2], y = +m[3];
+    var dt = new Date(Date.UTC(y, mo-1, d));
+    if(isNaN(dt.getTime())) return null;
+    return dt;
+  }
+  function monthKey(dt){ return dt.getUTCFullYear()+'-'+String(dt.getUTCMonth()+1).padStart(2,'0'); }
+  function shiftMonthKey(key, deltaMonths){
+    var p = key.split('-'); var y = +p[0], m = +p[1]-1;
+    var dt = new Date(Date.UTC(y, m + deltaMonths, 1));
+    return monthKey(dt);
+  }
+  function monthLabel(key){
+    var p = key.split('-');
+    var names = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return names[+p[1]-1] + '/' + p[0].slice(2);
+  }
+
+  function parseCsvFile(file){
+    return new Promise(function(resolve, reject){
+      Papa.parse(file, {
+        header:true, skipEmptyLines:'greedy', delimiter:';', encoding:'utf-8',
+        complete:function(res){
+          var fields = (res.meta && res.meta.fields) || [];
+          var dataCol = fields.find(function(f){ return f.trim().toLowerCase()==='data'; });
+          var valorCol = fields.find(function(f){ return f.trim().toLowerCase()==='valor'; });
+          if(!dataCol || !valorCol){
+            reject(new Error(file.name + ': não encontrei as colunas "data" e "valor".'));
+            return;
+          }
+          var rows = [];
+          res.data.forEach(function(r){
+            var dt = parseBRDate(r[dataCol]);
+            var v = parseFloat(String(r[valorCol]||'').replace(',', '.'));
+            if(dt && isFinite(v)) rows.push({date:dt, value:v});
+          });
+          rows.sort(function(a,b){ return a.date - b.date; });
+          if(!rows.length){ reject(new Error(file.name + ': nenhuma linha válida.')); return; }
+          resolve(rows);
+        },
+        error:function(err){ reject(err); }
+      });
+    });
+  }
+
+  /** Classifica a série pela mediana do intervalo entre datas consecutivas. */
+  function classifyFrequency(rows){
+    if(rows.length < 3) return 'unknown';
+    var deltas = [];
+    for(var i=1;i<rows.length;i++){
+      deltas.push((rows[i].date - rows[i-1].date) / 86400000);
+    }
+    deltas.sort(function(a,b){return a-b;});
+    var median = deltas[Math.floor(deltas.length/2)];
+    return median <= 6 ? 'daily' : 'monthly';
+  }
+
+  /* ============================================================
+     2. Agregação mensal
+     ============================================================ */
+
+  /** Selic diária (% a.d.) -> taxa acumulada no mês (%), por composição. */
+  function aggregateSelicMonthly(dailyRows){
+    var byMonth = new Map();
+    dailyRows.forEach(function(r){
+      var k = monthKey(r.date);
+      if(!byMonth.has(k)) byMonth.set(k, {product:1, first:r.date});
+      var acc = byMonth.get(k);
+      acc.product *= (1 + r.value/100);
+    });
+    var out = new Map();
+    byMonth.forEach(function(acc, k){
+      out.set(k, {date:new Date(Date.UTC(+k.split('-')[0], +k.split('-')[1]-1, 1)),
+                  value:(acc.product - 1) * 100});
+    });
+    return out;
+  }
+
+  function toMonthlyMap(monthlyRows){
+    var out = new Map();
+    monthlyRows.forEach(function(r){
+      var k = monthKey(r.date);
+      out.set(k, {date:new Date(Date.UTC(+k.split('-')[0], +k.split('-')[1]-1, 1)), value:r.value});
+    });
+    return out;
+  }
+
+  /* ============================================================
+     3. Estatística: Pearson + OLS
+     ============================================================ */
+
+  function pearson(xs, ys){
+    var n = xs.length;
+    if(n < 2) return {r:null, n:n};
+    var mx = xs.reduce(function(a,b){return a+b;},0)/n;
+    var my = ys.reduce(function(a,b){return a+b;},0)/n;
+    var sxy=0, sxx=0, syy=0;
+    for(var i=0;i<n;i++){
+      var dx = xs[i]-mx, dy = ys[i]-my;
+      sxy += dx*dy; sxx += dx*dx; syy += dy*dy;
+    }
+    if(sxx===0 || syy===0) return {r:null, n:n};
+    return {r: sxy/Math.sqrt(sxx*syy), n:n};
+  }
+
+  function linreg(xs, ys){
+    var n = xs.length;
+    if(n < 2) return null;
+    var mx = xs.reduce(function(a,b){return a+b;},0)/n;
+    var my = ys.reduce(function(a,b){return a+b;},0)/n;
+    var sxy=0, sxx=0;
+    for(var i=0;i<n;i++){ var dx = xs[i]-mx; sxy += dx*(ys[i]-my); sxx += dx*dx; }
+    if(sxx===0) return null;
+    var slope = sxy/sxx, intercept = my - slope*mx;
+    var ssTot=0, ssRes=0;
+    for(var j=0;j<n;j++){
+      var pred = intercept + slope*xs[j];
+      ssRes += Math.pow(ys[j]-pred, 2);
+      ssTot += Math.pow(ys[j]-my, 2);
+    }
+    var r2 = ssTot===0 ? 1 : 1 - ssRes/ssTot;
+    return {slope:slope, intercept:intercept, r2:r2, n:n};
+  }
+
+  /* ============================================================
+     4. Estado global
+     ============================================================ */
+
+  var state = {
+    selicMonthly: null,   // Map monthKey -> {date, value}  (% acumulada no mês)
+    selicDaily: null,     // array {date, value}
+    inadMonthly: null,    // Map monthKey -> {date, value}
+    allKeys: [],          // union de meses ordenada
+    startKey: null, endKey: null,
+    lag: 0, horizon: 6,
+    charts: {}
+  };
+
+  var fmtPct = function(v, d){ return (v===null||v===undefined||isNaN(v)) ? '—' : v.toFixed(d==null?2:d).replace('.', ',') + '%'; };
+
+  /* ============================================================
+     5. Upload UI
+     ============================================================ */
+
+  var pendingFiles = {}; // name -> {rows, role, freq}
+
+  var dropZone = document.getElementById('dropZone');
+  var fileInput = document.getElementById('fileInput');
+  var fileStatusEl = document.getElementById('fileStatus');
+  var loadErrEl = document.getElementById('loadErr');
+  var continueBtn = document.getElementById('continueBtn');
+
+  dropZone.addEventListener('click', function(){ fileInput.click(); });
+  ['dragenter','dragover'].forEach(function(ev){
+    dropZone.addEventListener(ev, function(e){ e.preventDefault(); dropZone.classList.add('hover'); });
+  });
+  ['dragleave','drop'].forEach(function(ev){
+    dropZone.addEventListener(ev, function(e){ e.preventDefault(); dropZone.classList.remove('hover'); });
+  });
+  dropZone.addEventListener('drop', function(e){
+    handleFiles(Array.from(e.dataTransfer.files).filter(function(f){ return /\.csv$/i.test(f.name); }));
+  });
+  fileInput.addEventListener('change', function(){ handleFiles(Array.from(fileInput.files)); });
+
+  function handleFiles(files){
+    loadErrEl.style.display = 'none';
+    files.forEach(function(file){
+      parseCsvFile(file).then(function(rows){
+        var freq = classifyFrequency(rows);
+        pendingFiles[file.name] = { rows: rows, role: freq==='daily' ? 'selic' : 'inad', freq: freq };
+        renderFileStatus();
+      }).catch(function(err){
+        loadErrEl.textContent = err.message;
+        loadErrEl.style.display = 'block';
+      });
+    });
+  }
+
+  function renderFileStatus(){
+    var names = Object.keys(pendingFiles);
+    if(!names.length){ fileStatusEl.innerHTML=''; continueBtn.classList.remove('ready'); return; }
+    var html = names.map(function(name){
+      var f = pendingFiles[name];
+      var detected = f.freq === 'daily' ? 'Selic (diária)' : 'Inadimplência (mensal)';
+      return '<div class="fileRow"><span class="name">' + escapeHtml(name) + ' — ' + f.rows.length + ' linhas</span>' +
+        '<select data-file="' + escapeHtml(name) + '">' +
+        '<option value="selic"' + (f.role==='selic'?' selected':'') + '>Selic (diária)</option>' +
+        '<option value="inad"' + (f.role==='inad'?' selected':'') + '>Inadimplência (mensal)</option>' +
+        '</select></div>';
+    }).join('') + '<div style="margin-top:8px;color:var(--muted);font-size:12.5px">Detectado automaticamente pela frequência das datas — ajuste se necessário.</div>';
+    fileStatusEl.innerHTML = html;
+    fileStatusEl.querySelectorAll('select').forEach(function(sel){
+      sel.addEventListener('change', function(){
+        pendingFiles[sel.getAttribute('data-file')].role = sel.value;
+        checkReady();
+      });
+    });
+    checkReady();
+  }
+
+  function escapeHtml(s){
+    var d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+  }
+
+  function checkReady(){
+    var roles = Object.keys(pendingFiles).map(function(n){ return pendingFiles[n].role; });
+    var ok = roles.includes('selic') && roles.includes('inad');
+    continueBtn.classList.toggle('ready', ok);
+  }
+
+  continueBtn.addEventListener('click', function(){
+    if(!continueBtn.classList.contains('ready')) return;
+    var selicFile = Object.keys(pendingFiles).find(function(n){ return pendingFiles[n].role==='selic'; });
+    var inadFile = Object.keys(pendingFiles).find(function(n){ return pendingFiles[n].role==='inad'; });
+    state.selicDaily = pendingFiles[selicFile].rows;
+    state.selicMonthly = aggregateSelicMonthly(pendingFiles[selicFile].rows);
+    state.inadMonthly = toMonthlyMap(pendingFiles[inadFile].rows);
+
+    var keySet = new Set();
+    state.selicMonthly.forEach(function(_, k){ keySet.add(k); });
+    state.inadMonthly.forEach(function(_, k){ keySet.add(k); });
+    state.allKeys = Array.from(keySet).sort();
+
+    var defaultWindow = 60; // "últimos 5 anos" — janela padrão mais informativa que o histórico completo (15+ anos dilui a tendência recente)
+    var startIdx = Math.max(0, state.allKeys.length - defaultWindow);
+    state.startKey = state.allKeys[startIdx];
+    state.endKey = state.allKeys[state.allKeys.length-1];
+
+    document.getElementById('uploadStage').style.display = 'none';
+    document.getElementById('dashStage').style.display = 'block';
+    document.getElementById('dataSourceNote').textContent =
+      selicFile + ' (' + pendingFiles[selicFile].rows.length + ' linhas diárias) · ' +
+      inadFile + ' (' + pendingFiles[inadFile].rows.length + ' meses)';
+
+    initFilterInputs();
+    renderAll();
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    pendingFiles = {};
+    fileInput.value = '';
+    fileStatusEl.innerHTML = '';
+    document.getElementById('dashStage').style.display = 'none';
+    document.getElementById('uploadStage').style.display = 'block';
+  });
+
+  /* ============================================================
+     6. Filtros
+     ============================================================ */
+
+  function initFilterInputs(){
+    var s = document.getElementById('startMonth'), e = document.getElementById('endMonth');
+    s.min = state.allKeys[0]; s.max = state.allKeys[state.allKeys.length-1];
+    e.min = state.allKeys[0]; e.max = state.allKeys[state.allKeys.length-1];
+    s.value = state.startKey; e.value = state.endKey;
+    var defaultBtn = document.querySelector('.presetBtn[data-preset="60"]');
+    if(defaultBtn) defaultBtn.classList.add('active');
+    s.addEventListener('change', function(){ if(s.value){ state.startKey = s.value; clearPreset(); renderAll(); } });
+    e.addEventListener('change', function(){ if(e.value){ state.endKey = e.value; clearPreset(); renderAll(); } });
+
+    document.querySelectorAll('.presetBtn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.presetBtn').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        var last = state.allKeys[state.allKeys.length-1];
+        if(btn.dataset.preset === 'all'){
+          state.startKey = state.allKeys[0];
+        } else {
+          var n = +btn.dataset.preset;
+          var idx = Math.max(0, state.allKeys.length - n);
+          state.startKey = state.allKeys[idx];
+        }
+        state.endKey = last;
+        s.value = state.startKey; e.value = state.endKey;
+        renderAll();
+      });
+    });
+
+    var lagRange = document.getElementById('lagRange');
+    lagRange.addEventListener('input', function(){
+      state.lag = +lagRange.value;
+      document.getElementById('lagVal').textContent = state.lag + (state.lag===1?' mês':' meses');
+      renderScatter(); renderKpis();
+    });
+    var horizonRange = document.getElementById('horizonRange');
+    horizonRange.addEventListener('input', function(){
+      state.horizon = +horizonRange.value;
+      document.getElementById('horizonVal').textContent = state.horizon + ' meses';
+      renderTrend(); renderKpis();
+    });
+  }
+
+  function clearPreset(){ document.querySelectorAll('.presetBtn').forEach(function(b){ b.classList.remove('active'); }); }
+
+  function filteredKeys(map){
+    return state.allKeys.filter(function(k){
+      return k >= state.startKey && k <= state.endKey && map.has(k);
+    });
+  }
+
+  /* ============================================================
+     7. Render — KPIs
+     ============================================================ */
+
+  function renderKpis(){
+    var lastDaily = state.selicDaily[state.selicDaily.length-1];
+    var annualized = (Math.pow(1 + lastDaily.value/100, 252) - 1) * 100;
+
+    var inadKeysAll = Array.from(state.inadMonthly.keys()).sort();
+    var lastInadKey = inadKeysAll[inadKeysAll.length-1];
+    var lastInad = state.inadMonthly.get(lastInadKey);
+
+    var corr = computeCorrelation();
+    var trend = computeTrend();
+
+    var forecastVal = null;
+    if(trend && trend.reg){
+      var xFuture = trend.n - 1 + state.horizon;
+      forecastVal = trend.reg.intercept + trend.reg.slope * xFuture;
+    }
+    var direction = trend && trend.reg ? (trend.reg.slope > 0.001 ? 'up' : (trend.reg.slope < -0.001 ? 'down' : null)) : null;
+
+    var kpis = [
+      { label:'Selic anualizada (último dado)', value: fmtPct(annualized, 2),
+        sub: 'referência: ' + fmtDateShort(lastDaily.date), color:'var(--series-selic)' },
+      { label:'Inadimplência atual', value: fmtPct(lastInad.value, 2),
+        sub: monthLabel(lastInadKey), color:'var(--series-inad)' },
+      { label:'Correlação Selic × Inadimplência', value: corr.r===null ? '—' : corr.r.toFixed(2).replace('.', ','),
+        sub: (corr.n||0) + ' meses no período · defasagem ' + state.lag + 'm' },
+      { label:'Previsão em +' + state.horizon + ' meses', value: forecastVal===null ? '—' : fmtPct(forecastVal, 2),
+        sub: direction ? (direction==='up' ? '↑ tendência de alta' : '↓ tendência de queda') : 'tendência estável',
+        cls: direction==='up' ? 'up' : (direction==='down' ? 'down' : '') }
+    ];
+
+    document.getElementById('kpiRow').innerHTML = kpis.map(function(k){
+      return '<div class="kpi"><div class="label">' + k.label + '</div>' +
+        '<div class="value ' + (k.cls||'') + '">' + k.value + '</div>' +
+        '<div class="sub">' + k.sub + '</div></div>';
+    }).join('');
+  }
+
+  function fmtDateShort(dt){
+    return String(dt.getUTCDate()).padStart(2,'0') + '/' + String(dt.getUTCMonth()+1).padStart(2,'0') + '/' + dt.getUTCFullYear();
+  }
+
+  /* ============================================================
+     8. Panel 1 — indexed comparison
+     ============================================================ */
+
+  function chartBaseOptions(){
+    return {
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'index', intersect:false },
+      plugins:{
+        legend:{ display:false },
+        tooltip:{
+          backgroundColor:'#20201f', borderColor:'#383835', borderWidth:1,
+          titleColor:'#ffffff', bodyColor:'#c3c2b7', padding:10,
+          titleFont:{weight:'600'}
+        }
+      },
+      scales:{
+        x:{ grid:{ color:'#2c2c2a', drawTicks:false }, ticks:{ color:'#898781', maxRotation:0 }, border:{ color:'#383835' } },
+        y:{ grid:{ color:'#2c2c2a', drawTicks:false }, ticks:{ color:'#898781' }, border:{ color:'#383835' } }
+      }
+    };
+  }
+
+  function renderIndexChart(){
+    var keys = filteredKeys(state.selicMonthly).filter(function(k){ return state.inadMonthly.has(k); });
+    if(!keys.length){ return; }
+    var base = { selic: state.selicMonthly.get(keys[0]).value, inad: state.inadMonthly.get(keys[0]).value };
+    var idxSelic = keys.map(function(k){ return (state.selicMonthly.get(k).value / base.selic) * 100; });
+    var idxInad = keys.map(function(k){ return (state.inadMonthly.get(k).value / base.inad) * 100; });
+
+    var labels = keys.map(monthLabel);
+    var ctx = document.getElementById('chartIndex');
+    if(state.charts.index) state.charts.index.destroy();
+    var opts = chartBaseOptions();
+    opts.plugins.tooltip.callbacks = {
+      title: function(items){ return items[0] ? items[0].label : ''; }
+    };
+    state.charts.index = new Chart(ctx, {
+      type:'line',
+      data:{ labels:labels, datasets:[
+        { label:'Selic (mensal, indexada)', data:idxSelic, borderColor:'#3987e5', backgroundColor:'rgba(57,135,229,.12)', borderWidth:2, pointRadius:0, pointHoverRadius:4, tension:.15, fill:false },
+        { label:'Inadimplência (indexada)', data:idxInad, borderColor:'#d95926', backgroundColor:'rgba(217,89,38,.12)', borderWidth:2, pointRadius:0, pointHoverRadius:4, tension:.15, fill:false }
+      ]},
+      options:opts
+    });
+
+    document.getElementById('legend1').innerHTML =
+      '<span class="lk"><span class="line" style="background:#3987e5"></span>Selic (mensal acumulada)</span>' +
+      '<span class="lk"><span class="line" style="background:#d95926"></span>Inadimplência</span>';
+
+    var tbl = '<thead><tr><th>Mês</th><th>Selic %</th><th>Inadimplência %</th><th>Selic (índice)</th><th>Inadimplência (índice)</th></tr></thead><tbody>' +
+      keys.map(function(k,i){
+        return '<tr><td>' + monthLabel(k) + '</td><td>' + fmtPct(state.selicMonthly.get(k).value,4) + '</td><td>' + fmtPct(state.inadMonthly.get(k).value,2) + '</td><td>' + idxSelic[i].toFixed(1) + '</td><td>' + idxInad[i].toFixed(1) + '</td></tr>';
+      }).join('') + '</tbody>';
+    document.getElementById('tableIndex').innerHTML = tbl;
+  }
+
+  /* ============================================================
+     9. Panel 2 — correlação (scatter + OLS)
+     ============================================================ */
+
+  function pairedSeries(){
+    var keys = filteredKeys(state.inadMonthly);
+    var xs = [], ys = [], labels = [];
+    keys.forEach(function(k){
+      var sk = shiftMonthKey(k, -state.lag);
+      if(state.selicMonthly.has(sk)){
+        xs.push(state.selicMonthly.get(sk).value);
+        ys.push(state.inadMonthly.get(k).value);
+        labels.push(k);
+      }
+    });
+    return { xs:xs, ys:ys, labels:labels };
+  }
+
+  function computeCorrelation(){
+    var p = pairedSeries();
+    return pearson(p.xs, p.ys);
+  }
+
+  function renderScatter(){
+    var p = pairedSeries();
+    var reg = linreg(p.xs, p.ys);
+    var corr = pearson(p.xs, p.ys);
+
+    var statsHtml = '<span class="s">Coeficiente de correlação (r): <b>' + (corr.r===null?'—':corr.r.toFixed(3).replace('.', ',')) + '</b></span>' +
+      '<span class="s">R²: <b>' + (reg?reg.r2.toFixed(3).replace('.', ','):'—') + '</b></span>' +
+      '<span class="s">Meses no período: <b>' + p.xs.length + '</b></span>' +
+      '<span class="s">Leitura: <b>' + interpretCorr(corr.r) + '</b></span>';
+    document.getElementById('corrStats').innerHTML = statsHtml;
+
+    var points = p.xs.map(function(x,i){ return {x:x, y:p.ys[i]}; });
+    var lineData = [];
+    if(reg && p.xs.length){
+      var minX = Math.min.apply(null, p.xs), maxX = Math.max.apply(null, p.xs);
+      lineData = [{x:minX, y:reg.intercept + reg.slope*minX}, {x:maxX, y:reg.intercept + reg.slope*maxX}];
+    }
+
+    var ctx = document.getElementById('chartScatter');
+    if(state.charts.scatter) state.charts.scatter.destroy();
+    var opts = {
+      responsive:true, maintainAspectRatio:false,
+      interaction:{ mode:'nearest', intersect:false },
+      plugins:{ legend:{display:false},
+        tooltip:{ backgroundColor:'#20201f', borderColor:'#383835', borderWidth:1, titleColor:'#fff', bodyColor:'#c3c2b7', padding:10,
+          callbacks:{ label:function(ctx){
+            if(ctx.dataset.label==='Ajuste linear') return 'Ajuste linear';
+            var lab = p.labels[ctx.dataIndex] ? monthLabel(p.labels[ctx.dataIndex]) : '';
+            return lab + ' — Selic ' + ctx.parsed.x.toFixed(3) + '% · Inad. ' + ctx.parsed.y.toFixed(2) + '%';
+          }}
+        }
+      },
+      scales:{
+        x:{ title:{display:true, text:'Selic acumulada no mês (%)', color:'#898781'}, grid:{color:'#2c2c2a'}, ticks:{color:'#898781'}, border:{color:'#383835'} },
+        y:{ title:{display:true, text:'Inadimplência (%)', color:'#898781'}, grid:{color:'#2c2c2a'}, ticks:{color:'#898781'}, border:{color:'#383835'} }
+      }
+    };
+    state.charts.scatter = new Chart(ctx, {
+      data:{ datasets:[
+        { type:'scatter', label:'Meses', data:points, backgroundColor:'rgba(57,135,229,.55)', pointRadius:5, pointHoverRadius:7 },
+        { type:'line', label:'Ajuste linear', data:lineData, borderColor:'#d95926', borderWidth:2, pointRadius:0, borderDash:[], fill:false, tension:0 }
+      ]},
+      options:opts
+    });
+
+    var tbl = '<thead><tr><th>Mês (inad.)</th><th>Selic defasada %</th><th>Inadimplência %</th></tr></thead><tbody>' +
+      p.labels.map(function(k,i){ return '<tr><td>' + monthLabel(k) + '</td><td>' + fmtPct(p.xs[i],4) + '</td><td>' + fmtPct(p.ys[i],2) + '</td></tr>'; }).join('') + '</tbody>';
+    document.getElementById('tableScatter').innerHTML = tbl;
+  }
+
+  function interpretCorr(r){
+    if(r===null) return 'dados insuficientes';
+    var a = Math.abs(r);
+    var strength = a>=0.7?'forte':a>=0.4?'moderada':a>=0.2?'fraca':'muito fraca ou nula';
+    var dir = r>0 ? 'positiva' : (r<0 ? 'negativa' : 'nula');
+    return strength + ' e ' + dir;
+  }
+
+  /* ============================================================
+     10. Panel 3 — tendência e previsão
+     ============================================================ */
+
+  function computeTrend(){
+    var keys = filteredKeys(state.inadMonthly);
+    if(keys.length < 2) return null;
+    var xs = keys.map(function(_,i){ return i; });
+    var ys = keys.map(function(k){ return state.inadMonthly.get(k).value; });
+    var reg = linreg(xs, ys);
+    return { keys:keys, xs:xs, ys:ys, reg:reg, n:keys.length };
+  }
+
+  function renderTrend(){
+    var t = computeTrend();
+    if(!t){ return; }
+    var reg = t.reg;
+    var slopeText = reg ? (reg.slope>=0?'+':'') + reg.slope.toFixed(4).replace('.', ',') + ' p.p./mês' : '—';
+    document.getElementById('trendStats').innerHTML =
+      '<span class="s">Inclinação da reta: <b>' + slopeText + '</b></span>' +
+      '<span class="s">R²: <b>' + (reg?reg.r2.toFixed(3).replace('.', ','):'—') + '</b></span>' +
+      '<span class="s">Base: <b>' + t.n + ' meses</b></span>';
+
+    var caveatEl = document.getElementById('trendCaveat');
+    if(reg && reg.r2 < 0.3){
+      caveatEl.style.display = 'block';
+      caveatEl.textContent = '⚠ Ajuste linear fraco neste período (R² = ' + reg.r2.toFixed(2).replace('.', ',') +
+        ') — a reta explica pouco da variação, e a previsão tende a regredir à média histórica em vez de seguir o movimento recente. Considere estreitar o período no filtro acima.';
+    } else {
+      caveatEl.style.display = 'none';
+    }
+
+    var labels = t.keys.map(monthLabel);
+    var histData = t.ys.slice();
+    var forecastKeys = [];
+    var forecastVals = [];
+    for(var h=1; h<=state.horizon; h++){
+      forecastKeys.push(shiftMonthKey(t.keys[t.keys.length-1], h));
+      forecastVals.push(reg ? reg.intercept + reg.slope*(t.n-1+h) : null);
+    }
+    var allLabels = labels.concat(forecastKeys.map(monthLabel));
+
+    // série "histórico": valores reais, null no período futuro
+    var histSeries = histData.concat(forecastKeys.map(function(){ return null; }));
+    // série "previsão": null no histórico exceto o último ponto real (para conectar a linha), valores previstos no futuro
+    var foreSeries = histData.map(function(){ return null; });
+    foreSeries[foreSeries.length-1] = histData[histData.length-1];
+    foreSeries = foreSeries.concat(forecastVals);
+
+    var ctx = document.getElementById('chartTrend');
+    if(state.charts.trend) state.charts.trend.destroy();
+    var opts = chartBaseOptions();
+    opts.plugins.tooltip.callbacks = {
+      label: function(ctx){
+        if(ctx.parsed.y===null) return null;
+        return ctx.dataset.label + ': ' + ctx.parsed.y.toFixed(2) + '%';
+      }
+    };
+    state.charts.trend = new Chart(ctx, {
+      type:'line',
+      data:{ labels:allLabels, datasets:[
+        { label:'Inadimplência (real)', data:histSeries, borderColor:'#d95926', backgroundColor:'rgba(217,89,38,.12)', borderWidth:2, pointRadius:0, pointHoverRadius:4, spanGaps:false, tension:.15 },
+        { label:'Previsão (regressão linear)', data:foreSeries, borderColor:'#d95926', borderDash:[6,4], borderWidth:2, pointRadius:0, pointHoverRadius:4, spanGaps:true, tension:0 }
+      ]},
+      options:opts
+    });
+
+    document.getElementById('legend3').innerHTML =
+      '<span class="lk"><span class="line" style="background:#d95926"></span>Inadimplência (real)</span>' +
+      '<span class="lk"><span class="line" style="background:#d95926; border-top:2px dashed #d95926; height:0"></span>Previsão</span>';
+
+    var tbl = '<thead><tr><th>Mês</th><th>Inadimplência prevista %</th></tr></thead><tbody>' +
+      forecastKeys.map(function(k,i){ return '<tr><td>' + monthLabel(k) + '</td><td>' + fmtPct(forecastVals[i],2) + '</td></tr>'; }).join('') + '</tbody>';
+    document.getElementById('tableForecast').innerHTML = tbl;
+  }
+
+  /* ============================================================
+     11. Orquestração
+     ============================================================ */
+
+  function renderAll(){
+    renderKpis();
+    renderIndexChart();
+    renderScatter();
+    renderTrend();
+  }
+
+})();
+</script>
+</body>
+</html>

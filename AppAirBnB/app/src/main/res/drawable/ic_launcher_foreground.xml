@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Telhado -->
+    <path
+        android:fillColor="#FF5A5F"
+        android:pathData="M54,28 L80,52 L72,52 L72,50 L54,34 L36,50 L36,52 L28,52 Z" />
+    <!-- Corpo da casa -->
+    <path
+        android:fillColor="#FF5A5F"
+        android:pathData="M41,52 L54,40 L67,52 L67,74 L41,74 Z" />
+    <!-- Barras do painel -->
+    <path
+        android:fillColor="#0E1420"
+        android:pathData="M46,68 L50,68 L50,60 L46,60 Z" />
+    <path
+        android:fillColor="#0E1420"
+        android:pathData="M52,68 L56,68 L56,54 L52,54 Z" />
+    <path
+        android:fillColor="#0E1420"
+        android:pathData="M58,68 L62,68 L62,63 L58,63 Z" />
+</vector>

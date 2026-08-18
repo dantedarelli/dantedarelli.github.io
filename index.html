@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meus Bancos — Central de Dashboards</title>
+<style>
+  :root{
+    --bg:#0e1420; --panel:#161f2f; --line:#26334a;
+    --txt:#e8eef7; --muted:#93a3bb; --brand:#ff5a5f; --brand2:#00a699; --brand3:#3987e5;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; display:grid; place-items:center;
+    background:radial-gradient(1200px 600px at 50% -10%, #1d2b45 0%, var(--bg) 60%);
+    color:var(--txt); font:16px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+    padding:24px;
+  }
+  .card{
+    max-width:720px; width:100%; background:var(--panel); border:1px solid var(--line);
+    border-radius:18px; padding:40px; text-align:center;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+  }
+  .logo{font-size:44px; line-height:1; margin-bottom:8px}
+  h1{margin:0 0 6px; font-size:26px; letter-spacing:-.4px}
+  .sub{color:var(--muted); margin:0 0 28px}
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; text-align:left}
+  @media (max-width:600px){ .grid{grid-template-columns:1fr} }
+  .item{
+    display:block; text-decoration:none; color:var(--txt);
+    background:#101827; border:1px solid var(--line); border-radius:14px;
+    padding:20px; transition:transform .15s ease, box-shadow .15s, border-color .15s;
+  }
+  .item:hover{transform:translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.35); border-color:var(--brand3)}
+  .item .ico{font-size:26px; margin-bottom:8px}
+  .item .t{font-weight:700; font-size:15.5px; margin-bottom:4px}
+  .item .d{font-size:13px; color:var(--muted)}
+  footer{margin-top:28px; padding-top:18px; border-top:1px solid var(--line); font-size:13px; color:var(--muted)}
+  footer a{color:var(--brand2)}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">📊</div>
+    <h1>Meus Bancos</h1>
+    <p class="sub">Central de dashboards analíticos</p>
+
+    <div class="grid">
+      <a class="item" href="AirBnB/index.html">
+        <div class="ico">🏙️</div>
+        <div class="t">Viajar é Legal — AirBnB RJ × NY</div>
+        <div class="d">Comparativo de anúncios, preços e mapa de calor entre Rio de Janeiro e Nova York.</div>
+      </a>
+      <a class="item" href="Financeiro/index.html">
+        <div class="ico">📈</div>
+        <div class="t">Selic × Inadimplência</div>
+        <div class="d">Correlação entre a taxa Selic e a inadimplência de crédito, com regressão linear para previsibilidade.</div>
+      </a>
+    </div>
+
+    <footer>
+      Autor: <strong>Dante Darelli</strong> ·
+      <a href="mailto:dante.darelli@hotmail.com">dante.darelli@hotmail.com</a>
+    </footer>
+  </main>
+</body>
+</html>

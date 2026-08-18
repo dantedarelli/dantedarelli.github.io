@@ -1,0 +1,151 @@
+/* ==========================================================================
+   base.css — reset, variáveis de tema, tipografia
+   Dashboard AirBnB · Viajar é Legal
+   ========================================================================== */
+
+:root {
+  /* Superfícies */
+  --bg:          #0e1420;
+  --bg-soft:     #131c2b;
+  --panel:       #161f2f;
+  --panel-2:     #1c2739;
+  --line:        #26334a;
+  --line-soft:   #1f2a3d;
+
+  /* Texto */
+  --txt:         #e8eef7;
+  --txt-strong:  #ffffff;
+  --muted:       #93a3bb;
+  --faint:       #67758e;
+
+  /* Marca */
+  --brand:       #ff5a5f;
+  --brand-dark:  #e0484d;
+  --brand2:      #00a699;
+  --brand2-dark: #00857b;
+  --accent:      #ffb400;
+
+  /* Semântica */
+  --ok:          #34c77b;
+  --warn:        #ffb400;
+  --danger:      #ff5a5f;
+  --info:        #4aa3ff;
+
+  /* Escala sequencial do coroplético (7 classes, do frio ao quente) */
+  --c1: #2b4b8f;
+  --c2: #2f7fb0;
+  --c3: #40a9a0;
+  --c4: #8fc46a;
+  --c5: #f2c14a;
+  --c6: #f08a3c;
+  --c7: #e0453f;
+
+  /* Cores por tipo de quarto (atribuídas dinamicamente por índice) */
+  --cat1: #4aa3ff;
+  --cat2: #00a699;
+  --cat3: #ffb400;
+  --cat4: #c77dff;
+  --cat5: #ff5a5f;
+  --cat6: #34c77b;
+
+  /* Layout */
+  --radius:      14px;
+  --radius-sm:   9px;
+  --sidebar-w:   306px;
+  --header-h:    62px;
+  --gap:         16px;
+
+  --shadow:      0 10px 30px rgba(0,0,0,.35);
+  --shadow-lg:   0 24px 60px rgba(0,0,0,.5);
+
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Code", "Consolas", "SF Mono", monospace;
+}
+
+/* Tema claro — ativado por [data-theme="light"] no <html> */
+:root[data-theme="light"] {
+  --bg:          #eef2f7;
+  --bg-soft:     #e4eaf3;
+  --panel:       #ffffff;
+  --panel-2:     #f5f8fc;
+  --line:        #d5dfec;
+  --line-soft:   #e4ebf4;
+
+  --txt:         #172032;
+  --txt-strong:  #0a1120;
+  --muted:       #5b6b83;
+  --faint:       #8595ad;
+
+  --shadow:      0 8px 24px rgba(23,32,50,.10);
+  --shadow-lg:   0 20px 48px rgba(23,32,50,.18);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* o scroll acontece dentro dos painéis */
+}
+
+h1, h2, h3, h4, p, figure, ul, ol { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; }
+
+a { color: var(--brand2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+svg { display: block; }
+
+/* ---------- Tipografia utilitária ---------- */
+.h-title   { font-size: 15px; font-weight: 700; letter-spacing: -.2px; color: var(--txt-strong); }
+.h-section { font-size: 11px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: var(--faint); }
+.mono      { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.muted     { color: var(--muted); }
+.faint     { color: var(--faint); }
+.nowrap    { white-space: nowrap; }
+.tnum      { font-variant-numeric: tabular-nums; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.hidden { display: none !important; }
+
+/* ---------- Scrollbars ---------- */
+* { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 99px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--faint); background-clip: content-box; }
+
+/* ---------- Foco acessível ---------- */
+:focus-visible {
+  outline: 2px solid var(--brand2);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

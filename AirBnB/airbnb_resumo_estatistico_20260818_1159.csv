@@ -1,0 +1,3 @@
+﻿cidade;moeda;taxa_cambio;anuncios_filtrados;anuncios_com_preco;sem_preco;preco_medio;mediana;minimo;maximo;p25;p75;iqr;p5;p95;desvio_padrao;coef_variacao;moda;outliers_detectados;metodo_outlier;acao_outlier;bairros_distintos;noites_minimas_media;disponibilidade_media;ocupacao_estimada;avaliacoes_media
+NY;USD;5,4;46;46;14863;306,54;293;161;534;238;373;135;172;496;94,39;0,308;220;1529;IQR (Tukey);Remover;14;6;302;0,173;39,4
+RJ;BRL;1;13;13;3657;457,38;515;189;914;277;536;259;205,8;801,2;213,25;0,466;515;3797;IQR (Tukey);Remover;8;1,4;206;0,436;61,2

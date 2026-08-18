@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard AirBnB — RJ × NY | Viajar é Legal</title>
+<meta name="description" content="Painel analítico de preços e demanda de locação AirBnB — Viajar é Legal">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/layout.css">
+<link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand__mark">🏠</div>
+      <div class="brand__text">
+        <div class="brand__title">Dashboard AirBnB</div>
+        <div class="brand__sub">Viajar é Legal · preços e demanda de locação</div>
+      </div>
+    </div>
+
+    <div class="header__cities" id="cityChips" aria-label="Bases importadas"></div>
+
+    <div class="header__spacer"></div>
+
+    <div class="header__actions">
+      <button class="btn btn--primary" id="btnImport" title="Importar uma nova base de cidade (CSV)">
+        <span>＋</span> Importar cidade
+      </button>
+      <button class="btn" id="btnExport" title="Exportar dados e resumo">⤓ Exportar</button>
+      <button class="btn" id="btnEmail" title="Enviar resumo por e-mail">✉ E-mail</button>
+      <button class="btn btn--icon" id="btnTheme" title="Alternar tema claro/escuro">◐</button>
+    </div>
+  </header>
+
+  <!-- ============================ SIDEBAR =========================== -->
+  <aside class="app-aside" id="sidebar">
+
+    <div class="filter-group">
+      <div class="filter-group__head">
+        <span class="h-section">Filtros</span>
+        <button class="btn btn--sm btn--ghost" id="btnResetFilters">Limpar</button>
+      </div>
+      <input class="input" id="fSearch" type="search" placeholder="Buscar por nome, bairro ou anfitrião…"
+             aria-label="Busca textual">
+    </div>
+
+    <hr class="sep">
+
+    <!-- Slider duplo de preço -->
+    <div class="filter-group">
+      <div class="filter-group__head">
+        <span class="h-section">Faixa de preço</span>
+        <label class="check" style="padding:2px 4px" title="Escala logarítmica facilita arrastar quando há valores extremos">
+          <input type="checkbox" id="fPriceLog" checked>
+          <span class="check__text faint" style="font-size:11px">log</span>
+        </label>
+      </div>
+      <div class="range" id="priceRange"></div>
+      <div class="range-io">
+        <input class="input input--xs" id="fPriceMin" type="number" inputmode="numeric" aria-label="Preço mínimo">
+        <span>até</span>
+        <input class="input input--xs" id="fPriceMax" type="number" inputmode="numeric" aria-label="Preço máximo">
+      </div>
+      <div class="faint" style="font-size:11.5px" id="priceRangeHint"></div>
+      <label class="check">
+        <input type="checkbox" id="fIncludeNoPrice">
+        <span class="check__text">Incluir anúncios sem preço</span>
+        <span class="check__count" id="noPriceCount"></span>
+      </label>
+    </div>
+
+    <hr class="sep">
+
+    <!-- Tratamento de outliers -->
+    <div class="filter-group">
+      <div class="filter-group__head">
+        <span class="h-section">Tratamento de outliers</span>
+        <span class="badge" id="outlierBadge">—</span>
+      </div>
+      <div class="field">
+        <label class="field__label" for="oMethod">Método</label>
+        <select class="select" id="oMethod">
+          <option value="iqr">IQR (Tukey)</option>
+          <option value="percentile">Corte por percentil</option>
+          <option value="mad">Z-score modificado (MAD)</option>
+          <option value="none">Sem tratamento</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label">Ação</label>
+        <div class="seg" id="oAction" role="group" aria-label="Ação sobre outliers">
+          <button data-v="remove" class="is-active">Remover</button>
+          <button data-v="winsorize">Winsorizar</button>
+          <button data-v="highlight">Destacar</button>
+        </div>
+      </div>
+      <div class="field" id="oParamIqr">
+        <label class="field__label" for="oIqrK">Multiplicador k do IQR: <span id="oIqrKVal">1,5</span></label>
+        <input type="range" id="oIqrK" min="0.5" max="4" step="0.1" value="1.5" style="width:100%">
+      </div>
+      <div class="field hidden" id="oParamPct">
+        <label class="field__label">Percentis de corte</label>
+        <div class="range-io">
+          <input class="input input--xs" id="oPLow" type="number" min="0" max="49" step="0.5" value="1">
+          <span>a</span>
+          <input class="input input--xs" id="oPHigh" type="number" min="51" max="100" step="0.5" value="99">
+        </div>
+      </div>
+      <div class="field hidden" id="oParamMad">
+        <label class="field__label" for="oMadZ">Limite |Z|: <span id="oMadZVal">3,5</span></label>
+        <input type="range" id="oMadZ" min="1" max="8" step="0.1" value="3.5" style="width:100%">
+      </div>
+      <label class="check">
+        <input type="checkbox" id="oPerRoom">
+        <span class="check__text">Calcular por tipo de acomodação</span>
+      </label>
+      <div class="faint" style="font-size:11.5px" id="outlierDetail"></div>
+    </div>
+
+    <hr class="sep">
+
+    <div class="filter-group">
+      <span class="h-section">Tipo de acomodação</span>
+      <div class="option-list" id="fRoomTypes"></div>
+    </div>
+
+    <div class="filter-group" id="groupBox">
+      <span class="h-section">Região / Borough</span>
+      <div class="option-list" id="fGroups"></div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group__head">
+        <span class="h-section">Bairros</span>
+        <button class="btn btn--sm btn--ghost" id="btnClearNb">Todos</button>
+      </div>
+      <input class="input input--xs" id="fNbSearch" type="search" placeholder="Filtrar bairros…"
+             aria-label="Filtrar lista de bairros">
+      <div class="option-list" id="fNeighbourhoods"></div>
+    </div>
+
+    <hr class="sep">
+
+    <div class="filter-group">
+      <span class="h-section">Demanda e estadia</span>
+      <div class="field">
+        <label class="field__label" for="fMinNights">Máximo de noites mínimas: <span id="fMinNightsVal">todos</span></label>
+        <input type="range" id="fMinNights" min="1" max="60" step="1" value="60" style="width:100%">
+      </div>
+      <div class="field">
+        <label class="field__label" for="fAvail">Disponibilidade mínima (dias/ano): <span id="fAvailVal">0</span></label>
+        <input type="range" id="fAvail" min="0" max="365" step="5" value="0" style="width:100%">
+      </div>
+      <div class="field">
+        <label class="field__label" for="fReviews">Mínimo de avaliações: <span id="fReviewsVal">0</span></label>
+        <input type="range" id="fReviews" min="0" max="200" step="1" value="0" style="width:100%">
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============================= MAIN ============================= -->
+  <main class="app-main" id="main">
+
+    <!-- Cards estatísticos -->
+    <section class="cards" id="cards" aria-label="Indicadores estatísticos"></section>
+
+    <!-- Chips de filtros ativos -->
+    <div class="chips" id="activeFilters"></div>
+
+    <!-- Mapa -->
+    <section class="panel map-panel">
+      <div class="panel__head">
+        <span class="h-title">Mapa</span>
+        <div class="seg" id="mapLayerSeg" role="group" aria-label="Camada do mapa">
+          <button data-v="choropleth" class="is-active">Coroplético</button>
+          <button data-v="heat">Calor</button>
+          <button data-v="points">Pontos</button>
+        </div>
+
+        <div class="spacer"></div>
+
+        <div id="mapOptsChoropleth" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <label class="field__label" for="mapMetric" style="margin:0">Métrica</label>
+          <select class="select" id="mapMetric" style="width:auto">
+            <option value="median">Preço mediano</option>
+            <option value="mean">Preço médio</option>
+            <option value="count">Nº de anúncios</option>
+            <option value="availability">Disponibilidade</option>
+            <option value="reviews">Avaliações</option>
+          </select>
+          <label class="field__label" for="mapHexR" style="margin:0">Célula <span id="mapHexRVal">0,6 km</span></label>
+          <input type="range" id="mapHexR" min="0.15" max="3" step="0.05" value="0.6" style="width:110px">
+          <select class="select" id="mapScale" style="width:auto" title="Escala de cor">
+            <option value="quantile">Quantil</option>
+            <option value="linear">Linear</option>
+            <option value="log">Log</option>
+          </select>
+        </div>
+
+        <div id="mapOptsPoints" class="hidden" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <label class="field__label" for="mapPointColor" style="margin:0">Cor por</label>
+          <select class="select" id="mapPointColor" style="width:auto">
+            <option value="room">Tipo de acomodação</option>
+            <option value="price">Faixa de preço</option>
+            <option value="city">Cidade</option>
+          </select>
+          <label class="field__label" for="mapPointLimit" style="margin:0">Máx. pontos <span id="mapPointLimitVal">12.000</span></label>
+          <input type="range" id="mapPointLimit" min="2000" max="60000" step="1000" value="12000" style="width:110px">
+        </div>
+
+        <div id="mapOptsHeat" class="hidden">
+          <label class="check">
+            <input type="checkbox" id="mapHeatPrice" checked>
+            <span class="check__text">Ponderar pelo preço</span>
+          </label>
+        </div>
+
+        <button class="btn btn--sm" id="btnFit" title="Enquadrar todas as bases">⤢ Enquadrar</button>
+      </div>
+      <div class="panel__body panel__body--flush" style="position:relative">
+        <div id="map"></div>
+      </div>
+    </section>
+
+    <!-- Gráficos -->
+    <section class="charts-grid">
+      <div class="panel">
+        <div class="panel__head"><span class="h-title">Distribuição de preços</span>
+          <span class="spacer"></span><span class="faint" style="font-size:11.5px">bins de Freedman–Diaconis</span></div>
+        <div class="panel__body"><div class="chart-box"><canvas id="chartHistogram"></canvas></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head"><span class="h-title">Dispersão de preços por cidade</span></div>
+        <div class="panel__body"><div class="chart-box"><canvas id="chartSpread"></canvas></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head"><span class="h-title">Top 12 bairros por preço mediano</span>
+          <span class="spacer"></span><span class="faint" style="font-size:11.5px">mín. 5 anúncios</span></div>
+        <div class="panel__body"><div class="chart-box" style="height:300px"><canvas id="chartNeighbourhoods"></canvas></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head"><span class="h-title">Composição por tipo de acomodação</span></div>
+        <div class="panel__body"><div class="chart-box"><canvas id="chartRoomType"></canvas></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head"><span class="h-title">Preço mediano por tipo</span></div>
+        <div class="panel__body"><div class="chart-box"><canvas id="chartPriceByType"></canvas></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel__head"><span class="h-title">Atividade por ano da última avaliação</span></div>
+        <div class="panel__body"><div class="chart-box"><canvas id="chartTimeline"></canvas></div></div>
+      </div>
+    </section>
+
+    <!-- Comparação entre cidades -->
+    <section class="panel">
+      <div class="panel__head">
+        <span class="h-title">Painel de comparação entre cidades</span>
+        <span class="spacer"></span>
+        <span class="faint" style="font-size:11.5px">valores por cidade + indicadores independentes de câmbio</span>
+      </div>
+      <div class="panel__body">
+        <div class="compare-grid">
+          <div>
+            <div class="h-section" style="margin-bottom:8px">Moeda e conversão</div>
+            <div id="cmpFx"></div>
+            <div class="h-section" style="margin:18px 0 8px">Indicadores adimensionais</div>
+            <div id="cmpNormalized"></div>
+          </div>
+          <div>
+            <div class="h-section" style="margin-bottom:8px">Métricas lado a lado</div>
+            <div id="cmpTable"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="app-footer">
+      <div class="footer__author">
+        <div class="footer__avatar">DD</div>
+        <div>
+          <div>Autor: <strong>Dante Darelli</strong></div>
+          <div class="faint" style="font-size:12px">Analista de dados · Viajar é Legal</div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="footer__links">
+        <a href="mailto:dante.darelli@hotmail.com">✉ dante.darelli@hotmail.com</a>
+        <span class="faint">Dados: arquivos CSV importados pelo usuário (padrão Inside Airbnb)</span>
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<!-- ======================= MODAL DE IMPORTAÇÃO ======================= -->
+<div class="modal-backdrop hidden" id="importModal" role="dialog" aria-modal="true" aria-labelledby="importTitle">
+  <div class="modal modal--wide">
+    <div class="modal__head">
+      <div>
+        <div class="modal__title" id="importTitle">Importar bases de cidades</div>
+        <div class="modal__desc">
+          O dashboard não contém nenhum dado embutido. Selecione os arquivos CSV
+          (ex.: <b>ny.csv</b> e <b>rj.csv</b>) para começar.
+        </div>
+      </div>
+      <button class="modal__close hidden" id="importClose" aria-label="Fechar">×</button>
+    </div>
+
+    <div class="modal__body">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button"
+           aria-label="Arraste arquivos CSV ou clique para selecionar">
+        <div class="dropzone__icon">📥</div>
+        <div class="dropzone__title">Arraste os arquivos CSV aqui</div>
+        <div class="dropzone__sub">ou clique para escolher — vários arquivos de uma vez</div>
+      </div>
+      <input type="file" id="fileInput" accept=".csv,text/csv" multiple class="sr-only">
+
+      <div class="import-list" id="importList"></div>
+
+      <div id="importMapping" class="hidden" style="margin-top:18px">
+        <div class="h-section" style="margin-bottom:8px">Mapeamento de colunas</div>
+        <p class="muted" style="font-size:12.5px;margin-bottom:10px">
+          Alguma coluna obrigatória não foi reconhecida automaticamente. Indique
+          qual coluna do arquivo corresponde a cada campo — é assim que qualquer
+          cidade nova pode ser importada, mesmo com nomes de coluna diferentes.
+        </p>
+        <div class="map-cols" id="mappingFields"></div>
+      </div>
+    </div>
+
+    <div class="modal__foot">
+      <span class="faint" id="importStatus">Nenhum arquivo selecionado.</span>
+      <span class="spacer"></span>
+      <button class="btn" id="importCancel">Cancelar</button>
+      <button class="btn btn--teal" id="importConfirm" disabled>Importar bases</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== MODAL DE EXPORTAÇÃO ======================= -->
+<div class="modal-backdrop hidden" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportTitle">
+  <div class="modal">
+    <div class="modal__head">
+      <div>
+        <div class="modal__title" id="exportTitle">Exportar</div>
+        <div class="modal__desc">Tudo respeita os filtros e o tratamento de outliers ativos.</div>
+      </div>
+      <button class="modal__close" data-close="exportModal" aria-label="Fechar">×</button>
+    </div>
+    <div class="modal__body">
+      <div id="exportSummaryBox" class="faint" style="font-size:12.5px;margin-bottom:16px"></div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button class="btn btn--block" id="btnExportDetail">⤓ CSV dos anúncios filtrados</button>
+        <button class="btn btn--block" id="btnExportSummary">⤓ CSV do resumo estatístico</button>
+        <button class="btn btn--block" id="btnCopySummary">⧉ Copiar resumo para a área de transferência</button>
+      </div>
+
+      <hr class="sep" style="margin:18px 0">
+
+      <div class="field">
+        <label class="field__label" for="emailTo">Enviar resumo por e-mail para</label>
+        <input class="input" id="emailTo" type="email" value="dante.darelli@hotmail.com">
+      </div>
+      <p class="faint" style="font-size:11.5px;margin-top:8px">
+        O navegador não anexa arquivos automaticamente: o CSV filtrado é baixado
+        e o cliente de e-mail abre com o resumo já preenchido — basta anexar o arquivo.
+      </p>
+      <button class="btn btn--teal btn--block" id="btnSendEmail" style="margin-top:10px">✉ Abrir e-mail com o resumo</button>
+    </div>
+    <div class="modal__foot">
+      <span class="spacer"></span>
+      <button class="btn" data-close="exportModal">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<!-- Bibliotecas -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+<!-- Aplicação -->
+<script src="scripts/state.js"></script>
+<script src="scripts/stats.js"></script>
+<script src="scripts/outliers.js"></script>
+<script src="scripts/csv-loader.js"></script>
+<script src="scripts/filters.js"></script>
+<script src="scripts/map.js"></script>
+<script src="scripts/charts.js"></script>
+<script src="scripts/compare.js"></script>
+<script src="scripts/export.js"></script>
+<script src="scripts/ui.js"></script>
+<script src="scripts/app.js"></script>
+</body>
+</html>

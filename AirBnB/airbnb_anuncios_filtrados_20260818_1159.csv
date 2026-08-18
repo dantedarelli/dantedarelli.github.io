@@ -1,0 +1,60 @@
+﻿cidade;moeda;id;nome;anfitriao;regiao;bairro;tipo_acomodacao;latitude;longitude;preco;preco_moeda_comum;taxa_cambio;noites_minimas;avaliacoes;avaliacoes_por_mes;ultima_avaliacao;disponibilidade_365;anuncios_do_anfitriao;outlier
+NY;USD;253846;Superior @ Box House;The Box House Hotel;Brooklyn;Greenpoint;Hotel room;40,7375602722168;-73,95349884033203;238;1285,2;5,4;1;33;0,21;2024-04-28;165;29;nao
+NY;USD;77765;Superior @ Box House;The Box House Hotel;Brooklyn;Greenpoint;Hotel room;40,737770080566406;-73,95365905761719;238;1285,2;5,4;1;70;0,4;2025-05-11;164;29;nao
+NY;USD;80684;Duplex w/ Terrace @ Box House Hotel;The Box House Hotel;Brooklyn;Greenpoint;Hotel room;40,7375602722168;-73,95349884033203;380;2052;5,4;1;10;0,06;2022-09-12;167;29;nao
+NY;USD;84010;Superior @ Box House;The Box House Hotel;Brooklyn;Greenpoint;Hotel room;40,737770080566406;-73,95365905761719;238;1285,2;5,4;1;36;0,22;2025-05-18;164;29;nao
+NY;USD;17097495;The Chester Himes Room at The Harlem Flophouse;René;Manhattan;Harlem;Hotel room;40,808998107910156;-73,95166015625;178;961,2;5,4;1;107;1,05;2025-05-26;275;4;nao
+NY;USD;21205650;Comfy 1 bedroom suite in midtown manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,75035858154297;-73,97537994384766;220;1188;5,4;30;0;;;364;83;nao
+NY;USD;21205810;Elegant 1 bedroom suite in midtown Manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,74843978881836;-73,97572326660156;240;1296;5,4;30;1;0,01;2019-02-17;364;83;nao
+NY;USD;21205891;Roomy 1 bedroom suite in midtown Manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,74848175048828;-73,97544860839844;220;1188;5,4;30;16;0,19;2024-11-05;319;83;nao
+NY;USD;21206002;Impressive 1 bedroom near Sloan Kettering;Stanley;Manhattan;Murray Hill;Hotel room;40,74884033203125;-73,9775619506836;220;1188;5,4;30;3;0,06;2023-08-05;364;83;nao
+NY;USD;21073975;Charming 1 bedroom in mid-town Manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,74861145019531;-73,9779281616211;240;1296;5,4;30;2;0,02;2018-07-28;364;83;nao
+NY;USD;21098555;Fabulous 1 bedroom in midtown Manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,74993133544922;-73,97554779052734;274;1479,6000000000001;5,4;30;0;;;364;83;nao
+NY;USD;21098848;Sunny 1 bedroom suite in midtown Manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,750099182128906;-73,97743225097656;220;1188;5,4;30;2;0,03;2021-07-18;364;83;nao
+NY;USD;21098980;Comfortable studio suite in midtown Manhattan;Stanley;Manhattan;Murray Hill;Hotel room;40,7501106262207;-73,97724914550781;170;918,0000000000001;5,4;30;4;0,04;2021-02-28;320;83;nao
+NY;USD;22431770;Freehand New York - Premium Queen Room;Freehand;Manhattan;Flatiron District;Hotel room;40,740299224853516;-73,98599243164062;314;1695,6000000000001;5,4;1;1052;11,8;2025-05-04;0;6;nao
+NY;USD;33580893;Bedford Double;Walker Hotel Greenwich Village;Manhattan;Greenwich Village;Hotel room;40,7351188659668;-73,9970474243164;440;2376;5,4;1;34;0,48;2025-03-28;333;2;nao
+NY;USD;33580907;Grove Queen;Walker Hotel Greenwich Village;Manhattan;Greenwich Village;Hotel room;40,73543930053711;-73,99746704101562;400;2160;5,4;1;77;1,03;2025-01-02;347;2;nao
+NY;USD;34491918;ADA Compliant Studio Room near Central Park;The Michelangelo;Manhattan;Theater District;Hotel room;40,76156997680664;-73,9825668334961;475;2565;5,4;1;2;0,03;2021-12-23;58;4;nao
+NY;USD;35539856;Nesva Hotel, King City View;Nesva Hotel;Queens;Long Island City;Hotel room;40,75331115722656;-73,93501281738281;243;1312,2;5,4;1;45;0,65;2025-01-03;313;12;nao
+NY;USD;35540158;Nesva Hotel, King Premium Balcony;Nesva Hotel;Queens;Long Island City;Hotel room;40,75331115722656;-73,93501281738281;237;1279,8000000000002;5,4;1;47;0,67;2025-04-17;304;12;nao
+NY;USD;35539586;Family Room, One Double size bed and a Twin bed;Nesva Hotel;Queens;Long Island City;Hotel room;40,75331115722656;-73,93501281738281;224;1209,6000000000001;5,4;1;70;1,01;2025-02-08;230;12;nao
+NY;USD;35539721;Nesva Hotel, Double Room Mobility;Nesva Hotel;Queens;Long Island City;Hotel room;40,75331115722656;-73,93501281738281;224;1209,6000000000001;5,4;1;45;0,65;2024-12-24;256;12;nao
+NY;USD;725398332156942232;Big Apple Getaway! Steps to Empire State Bldg.!;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;277;1495,8000000000002;5,4;1;1;0,05;2023-10-20;363;70;nao
+NY;USD;726051328615599170;Experience NYC Like Never Before! Pet-friendly!;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;277;1495,8000000000002;5,4;1;1;0,05;2023-11-12;363;70;nao
+NY;USD;726057650522445330;Steps from NYC Attractions! Pets are Welcome!;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;277;1495,8000000000002;5,4;1;0;;;363;70;nao
+NY;USD;772583096454227135;Rare Find! Near Museum of Modern Art;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;303;1636,2;5,4;1;0;;;365;70;nao
+NY;USD;772583284030848410;Indulge in Home Like Comfort! Pet-friendly;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;303;1636,2;5,4;1;0;;;365;70;nao
+NY;USD;773107581377335705;Just What You Were Looking For! Pets Allowed;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;376;2030,4;5,4;1;0;;;272;70;nao
+NY;USD;773155078509233940;Indulge in Home Like Comfort! Pet-friendly Unit!;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;321;1733,4;5,4;1;0;;;365;70;nao
+NY;USD;773156080339112883;Comfort Meets Relaxation! Pets are Welcome!;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;293;1582,2;5,4;1;0;;;365;70;nao
+NY;USD;766586863150065296;Experience NYC! 4 Min Walk from Empire State;RoomPicks By Antony;Manhattan;Midtown;Hotel room;40,74782180786133;-73,98651885986328;286;1544,4;5,4;1;1;0,04;2023-07-31;362;70;nao
+NY;USD;887752876011773990;Premier Studio Room at Ink 48 Hotel!;RoomPicks;Manhattan;Hell's Kitchen;Hotel room;40,76457977294922;-73,9959487915039;403;2176,2000000000003;5,4;1;2;0,11;2025-01-03;362;157;nao
+NY;USD;1004960466960763499;Hidden Gem in New York! Near Bronx Zoo;RoomPicks;Manhattan;Washington Heights;Hotel room;40,84775161743164;-73,93153381347656;322;1738,8000000000002;5,4;1;0;;;362;157;nao
+NY;USD;1004966777244088455;Enjoy at Metropolitan Museum of Art! Pets Allowed;RoomPicks;Manhattan;Washington Heights;Hotel room;40,84775161743164;-73,93153381347656;293;1582,2;5,4;1;76;4,06;2025-04-04;364;157;nao
+NY;USD;1004977759124184759;2 Queen Room, Radio Hotel, Near Attractions;RoomPicks;Manhattan;Washington Heights;Hotel room;40,84775161743164;-73,93153381347656;330;1782,0000000000002;5,4;1;12;0,67;2025-05-31;365;157;nao
+NY;USD;1065734338333399135;Studio Room at Radio Hotel, Pets Allowed!;RoomPicks;Manhattan;Washington Heights;Hotel room;40,84775161743164;-73,93153381347656;303;1636,2;5,4;1;2;0,12;2024-08-07;364;157;nao
+NY;USD;1065758362601303702;Best Value, Quality Stay! Near Wave Hill;RoomPicks;Manhattan;Washington Heights;Hotel room;40,84775161743164;-73,93153381347656;341;1841,4;5,4;1;1;0,07;2024-03-26;365;157;nao
+NY;USD;1065782226324337615;Deluxe Queen Room at Radio Hotel New York!;RoomPicks;Manhattan;Washington Heights;Hotel room;40,84775161743164;-73,93153381347656;311;1679,4;5,4;1;5;0,31;2025-02-02;362;157;nao
+NY;USD;1094764389824490264;Deluxe 2 Double Beds at The Lucerne Hotel!;RoomPicks;Manhattan;Upper West Side;Hotel room;40,783470153808594;-73,9784927368164;401;2165,4;5,4;1;1;0,26;2025-02-23;363;157;nao
+NY;USD;1094777151341930866;Superior 2 Double Beds at The Lucerne Hotel!;RoomPicks;Manhattan;Upper West Side;Hotel room;40,783470153808594;-73,9784927368164;401;2165,4;5,4;1;0;;;363;157;nao
+NY;USD;1095646668147768174;Stylish Unit at Wythe Hotel w/ Amazing Views;RoomPicks;Brooklyn;Williamsburg;Hotel room;40,72106170654297;-73,95848846435547;503;2716,2000000000003;5,4;1;0;;;73;157;nao
+NY;USD;1152829134880423280;Double Park View, Public - Sophisticated New York;RoomPicks;Manhattan;Lower East Side;Hotel room;40,72311019897461;-73,9920883178711;533;2878,2000000000003;5,4;1;0;;;348;157;nao
+NY;USD;1146753108357926642;Modern Hotel Unit Near Central Park;RoomPicks;Manhattan;Lower East Side;Hotel room;40,72311019897461;-73,9920883178711;534;2883,6000000000004;5,4;1;7;0,59;2024-08-22;351;157;nao
+NY;USD;1146753963938449419;Chic Urban Unit w/ Rooftop Bar + Wellness Center;RoomPicks;Manhattan;Lower East Side;Hotel room;40,72311019897461;-73,9920883178711;386;2084,4;5,4;1;3;0,24;2025-02-17;257;157;nao
+NY;USD;1147706571147821466;Elevated Stay, Public NYC - Heart of the City;RoomPicks;Manhattan;Lower East Side;Hotel room;40,72311019897461;-73,9920883178711;364;1965,6000000000001;5,4;1;22;1,71;2025-06-02;259;157;nao
+NY;USD;1300820745713362015;Comfy Room Near JFK Airport – 10 Min Ride;RoomPicks;Queens;Jamaica;Hotel room;40,695838928222656;-73,80364990234375;161;869,4000000000001;5,4;1;16;4,75;2025-04-30;276;2;nao
+NY;USD;1300823553800804690;Easy NYC Access from Budget-friendly Room;RoomPicks;Queens;Jamaica;Hotel room;40,69728088378906;-73,80384826660156;169;912,6;5,4;1;5;1,88;2025-05-27;276;2;nao
+RJ;BRL;4557003;LOFT WITH TERRACE SUGAR LOAF PANORAMIC VIEW S201;Frederico;;Santa Teresa;Hotel room;-22,917970657348633;-43,18206024169922;277;277;1;1;196;1,6;2025-02-27;190;9;nao
+RJ;BRL;10626211;Top Leblon Residence - Perfect location;Thiago;;Leblon;Hotel room;-22,984180450439453;-43,22234344482422;572;572;1;3;196;1,79;2025-02-23;324;1;nao
+RJ;BRL;12306768;Double room with big closet and safe;Marcus;;Botafogo;Hotel room;-22,95639991760254;-43,19313049316406;237;237;1;1;82;0,77;2025-03-12;80;8;nao
+RJ;BRL;12307393;Stained Glass private room;Marcus;;Botafogo;Hotel room;-22,955900192260742;-43,192928314208984;383;383;1;1;110;1,04;2025-01-04;91;8;nao
+RJ;BRL;22883940;Suite casal e 2 filhos  202 Airport Santos Dumont;Sebastião;;Praça da Bandeira;Hotel room;-22,913240432739258;-43,21260070800781;189;189;1;1;3;0,05;2021-03-02;0;16;nao
+RJ;BRL;24933756;Sea view apartment in Copacabana;Marcio;;Copacabana;Hotel room;-22,964750289916992;-43,173988342285156;329;329;1;1;16;0,29;2024-12-21;104;50;nao
+RJ;BRL;27750790;Flat Barra da Tijuca  Vista panorâmica para o Mar;Ivana;;Barra da Tijuca;Hotel room;-23,00868034362793;-43,3554801940918;536;536;1;2;48;0,6;2025-03-04;146;9;nao
+RJ;BRL;35602213;Arosa Rio Hotel-Breakfast included-Lapa-Centro;Arosa;;Centro;Hotel room;-22,91278076171875;-43,19110870361328;726;726;1;1;5;0,11;2022-01-12;346;4;nao
+RJ;BRL;35602220;Arosa Rio Hotel-Breakfast Included-Downtown;Arosa;;Centro;Hotel room;-22,911949157714844;-43,19047927856445;914;914;1;1;0;;;340;4;nao
+RJ;BRL;37905741;Venit Barra Hotel - Venit Standard King;Venit;;Barra da Tijuca;Hotel room;-22,97386932373047;-43,390541076660156;515;515;1;1;6;0,27;2025-03-02;314;3;nao
+RJ;BRL;37905870;Venit Barra Hotel - Venit Standard Twin;Venit;;Barra da Tijuca;Hotel room;-22,97323989868164;-43,39168930053711;515;515;1;1;1;0,03;2022-08-07;301;3;nao
+RJ;BRL;37087527;Suite Casal Flat RioStay Riocentro_Stay'nRio 2;Tatiana;;Jacarepaguá;Hotel room;-22,973880767822266;-43,41366958618164;217;217;1;2;69;1,02;2025-03-11;308;12;nao
+RJ;BRL;38320085;Lindo Flat frente Mar  Barra da Tijuca;Ivana;;Barra da Tijuca;Hotel room;-23,0091495513916;-43,35334014892578;536;536;1;2;64;0,96;2025-01-30;133;9;nao
